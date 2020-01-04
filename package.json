@@ -1,0 +1,9 @@
+{
+  "name": "storylynx-api-faunadb",
+  "version": "0.0.1",
+  "description": "StoryLynx API plugin for FaunaDB support.",
+  "repository": "git@github.com:arxpoetica/storylynx-api-faunadb.git",
+  "author": "@arxpoetica",
+  "license": "MIT",
+  "dependencies": {}
+}
