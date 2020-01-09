@@ -5,5 +5,9 @@
   "repository": "git@github.com:arxpoetica/storylynx-api-faunadb.git",
   "author": "@arxpoetica",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "ansi-colors": "4.1.1",
+    "faunadb": "2.10.2",
+    "node-fetch": "2.6.0"
+  }
 }

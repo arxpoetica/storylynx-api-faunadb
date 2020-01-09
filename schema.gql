@@ -1,0 +1,76 @@
+type User {
+	username: String! @unique
+	hash: String
+	salt: String
+	role: String!
+	first_name: String
+	last_name: String
+	avatar: String
+}
+type Page {
+	title: String!
+	slug: String! @unique
+	html: String
+	header_navigation: Boolean
+	footer_navigation: Boolean
+}
+type Tag {
+	name: String! @unique
+	posts: [Post] @relation
+	assets: [Asset] @relation
+}
+type Post {
+	old_id: String
+	published: Int!
+	status: String
+	slug: String! @unique
+	headline: String! @unique
+	subheadline: String
+	author: String!
+	byline: String
+	linkBack: String # TODO: make this a typed array????
+	html: String!
+	assets: [Asset] @relation
+	tags: [Tag] @relation
+}
+type Asset { # maybe this is the source, and a group of sources is...a special archive page????????
+	url: String
+	# handle: String
+	# filename:  String
+	width: Int
+	height: Int
+	size: Int
+	mime_type: String
+	cover: String
+	summary: String
+	source: String
+
+	# NEED TO HAVE A DISCUSSION WITH NATHANIEL ABOUT THIS:
+	# OR JUST FIGURE IT OUT AND LET HIM KNOW
+	# ACTUALLY, I ALREADY KNOW. It's an aggregation of any type that has a video / or image
+	content_type: String
+	subject: String
+	year: Int
+	tags: [Tag] @relation
+	posts: [Post] @relation
+	asset_pages: [AssetPage] @relation
+}
+
+type AssetPage {
+	old_id: String
+	published: Int!
+	title: String!
+	slug: String # believe it or not, we're not making it mandatory
+	summary: String
+	html: String # does this belong with the asset????????
+	assets: [Asset!] @relation # remember to go fix for that one linked asset
+}
+
+type Query {
+	allUsers: [User!]!
+	allPages: [Page!]!
+	allTags: [Tag!]!
+	allPosts: [Post!]!
+	allAssets: [Asset!]!
+	allAssetPages: [AssetPage!]!
+}
