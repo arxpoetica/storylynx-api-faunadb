@@ -28,11 +28,6 @@ module.exports = async() => {
 			body: fs.createReadStream(path.join(process.cwd(), 'node_modules/storylynx-api-faunadb/schema.gql')),
 		})
 
-		console.log(Object.keys(res))
-		console.log(Object.keys(res.__proto__))
-		console.log(res.status)
-		console.log(res.statusText)
-
 		if (res.status > 299) {
 			throw new Error(`${res.status} ${res.statusText} - ${await res.text()}`)
 		}
@@ -43,7 +38,7 @@ module.exports = async() => {
 		console.log(green('------------------------------>>>'))
 		console.log(`Initialized in [${end}] seconds`)
 		console.log(green('------------------------------>>>'))
-		console.log(res)
+		// console.log(res)
 	} catch (error) {
 		const end = Math.round((Date.now() - start) / 100) / 10
 		clearTimeout(timer)
