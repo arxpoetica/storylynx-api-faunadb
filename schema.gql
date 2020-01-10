@@ -1,5 +1,5 @@
-type Meta {
-	model: String!
+type Model {
+	model: String! @unique @index
 	count: Int
 	pagination: [String]
 }
@@ -74,6 +74,8 @@ type AssetPage {
 }
 
 type Query {
+	Models: [Model!]!
+	findModelByModel(model: String!): Model
 	Users: [User!]!
 	Pages: [Page!]!
 	Tags: [Tag!]!
