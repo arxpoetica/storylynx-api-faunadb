@@ -1,3 +1,8 @@
+type Meta {
+	model: String!
+	count: Int
+	pagination: [String]
+}
 type User {
 	username: String! @unique
 	hash: String
