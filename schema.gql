@@ -28,7 +28,7 @@ type Post {
 	subheadline: String
 	author: String!
 	byline: String
-	linkBack: String # TODO: make this a typed array????
+	link_back: String # TODO: make this a typed array????
 	html: String!
 	assets: [Asset] @relation
 	tags: [Tag] @relation
@@ -67,10 +67,10 @@ type AssetPage {
 }
 
 type Query {
-	allUsers: [User!]!
-	allPages: [Page!]!
-	allTags: [Tag!]!
-	allPosts: [Post!]!
-	allAssets: [Asset!]!
-	allAssetPages: [AssetPage!]!
+	Users: [User!]!
+	Pages: [Page!]!
+	Tags: [Tag!]!
+	Posts: [Post!]!
+	Assets: [Asset!]!
+	AssetPages: [AssetPage!]!
 }
