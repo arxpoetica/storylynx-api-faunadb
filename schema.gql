@@ -43,7 +43,6 @@ type Asset { # maybe this is the source, and a group of sources is...a special a
 	height: Int
 	size: Long
 	mime_type: String
-	cover: String
 	summary: String
 	source: String
 
