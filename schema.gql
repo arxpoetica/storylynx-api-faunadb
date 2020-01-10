@@ -21,12 +21,12 @@ type Tag {
 }
 type Post {
 	old_id: String
-	published: Int!
+	published: Long!
 	status: String
 	slug: String! @unique
 	headline: String! @unique
 	subheadline: String
-	author: String!
+	author: String
 	byline: String
 	link_back: String # TODO: make this a typed array????
 	html: String!
@@ -39,7 +39,7 @@ type Asset { # maybe this is the source, and a group of sources is...a special a
 	# filename:  String
 	width: Int
 	height: Int
-	size: Int
+	size: Long
 	mime_type: String
 	cover: String
 	summary: String
@@ -58,7 +58,7 @@ type Asset { # maybe this is the source, and a group of sources is...a special a
 
 type AssetPage {
 	old_id: String
-	published: Int!
+	published: Long!
 	title: String!
 	slug: String # believe it or not, we're not making it mandatory
 	summary: String

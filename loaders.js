@@ -17,7 +17,7 @@ module.exports = {
 			if (json.errors) { throw Error(json.errors.map(err => `  ${err.message}`).join('\n')) }
 			return json.data
 		} catch (error) {
-			console.log(red('cmsMutate Errors:\n'), error.message)
+			console.log(red('FaunaDB GraphQL Errors:\n'), error.message)
 			return { error: 1, message: error.message }
 		}
 	},
