@@ -37,8 +37,8 @@ type Post {
 type Asset { # maybe this is the source, and a group of sources is...a special archive page????????
 	old_id: String
 	url: String
-	# handle: String
-	# filename:  String
+	handle: String
+	filename: String
 	width: Int
 	height: Int
 	size: Long
@@ -53,6 +53,7 @@ type Asset { # maybe this is the source, and a group of sources is...a special a
 	content_type: String
 	subject: String
 	year: Int
+	poster: Asset
 	tags: [Tag] @relation
 	posts: [Post] @relation
 	asset_pages: [AssetPage] @relation
