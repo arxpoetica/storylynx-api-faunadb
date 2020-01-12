@@ -1,7 +1,6 @@
 type Model {
 	model: String! @unique @index
 	count: Int
-	pagination: [String]
 }
 type User {
 	username: String! @unique
