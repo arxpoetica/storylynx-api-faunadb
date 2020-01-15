@@ -11,7 +11,7 @@ type User {
 	last_name: String
 	avatar: String
 }
-type Page {
+type Route {
 	title: String!
 	slug: String! @unique
 	html: String
@@ -38,7 +38,7 @@ type Post {
 	assets: [Asset] @relation
 	tags: [Tag] @relation
 }
-type Asset { # maybe this is the source, and a group of sources is...a special archive page????????
+type Asset {
 	old_id: String
 	url: String
 	handle: String
@@ -59,11 +59,12 @@ type Asset { # maybe this is the source, and a group of sources is...a special a
 	poster: Asset
 	tags: [Tag] @relation
 	posts: [Post] @relation
-	asset_pages: [AssetPage] @relation
+	asset_groups: [AssetGroup] @relation
 }
 
-type AssetPage {
+type AssetGroup {
 	old_id: String
+	status: String
 	published: Long!
 	title: String!
 	slug: String # believe it or not, we're not making it mandatory
@@ -76,9 +77,9 @@ type Query {
 	Models: [Model!]!
 	findModelByModel(model: String!): Model
 	Users: [User!]!
-	Pages: [Page!]!
+	Routes: [Route!]!
 	Tags: [Tag!]!
 	Posts: [Post!]!
 	Assets: [Asset!]!
-	AssetPages: [AssetPage!]!
+	AssetGroups: [AssetGroup!]!
 }
