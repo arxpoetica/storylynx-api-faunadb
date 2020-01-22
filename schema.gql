@@ -1,7 +1,17 @@
-type Model {
-	model: String! @unique @index
+
+# =================================== >>>
+# =================================== >>> Metadata
+# =================================== >>>
+
+type Info {
+	collection: String! @unique @index
 	count: Int
 }
+
+# =================================== >>>
+# =================================== >>> Users & Auth
+# =================================== >>>
+
 type User {
 	username: String! @unique
 	hash: String
@@ -11,6 +21,11 @@ type User {
 	last_name: String
 	avatar: String
 }
+
+# =================================== >>>
+# =================================== >>> Basic Types
+# =================================== >>>
+
 type Route {
 	title: String!
 	slug: String! @unique
@@ -18,17 +33,11 @@ type Route {
 	header_navigation: Boolean
 	footer_navigation: Boolean
 }
-type Tag {
-	old_id: String
-	name: String! @unique
-	posts: [Post] @relation
-	assets: [Asset] @relation
-}
 type Post {
 	old_id: String
 	published: Long!
 	status: String
-	slug: String! @unique
+	slug: String! @unique @index
 	headline: String! @unique
 	subheadline: String
 	author: String
@@ -38,6 +47,11 @@ type Post {
 	assets: [Asset] @relation
 	tags: [Tag] @relation
 }
+
+# =================================== >>>
+# =================================== >>> Assets & Asset Groups
+# =================================== >>>
+
 type Asset {
 	old_id: String
 	url: String
@@ -61,7 +75,6 @@ type Asset {
 	posts: [Post] @relation
 	asset_groups: [AssetGroup] @relation
 }
-
 type AssetGroup {
 	old_id: String
 	status: String
@@ -73,13 +86,61 @@ type AssetGroup {
 	assets: [Asset!] @relation # remember to go fix for that one linked asset
 }
 
+# =================================== >>>
+# =================================== >>> Modals / Stories
+# =================================== >>>
+
+type Modal {
+	name: String @unique
+	# width: Int
+	# height: Int
+	root: Clip
+	clips: [Clip!] @relation(name: "modal_clips")
+}
+type Clip {
+	name: String
+	type: String
+	styles: String
+	intervals: [Interval!] @relation
+	children: [Clip!]
+	# parent: Clip
+	modal: Modal! @relation(name: "modal_clips")
+}
+type Interval {
+	name: String
+	start: Int
+	stop: Int
+	keyframes: String
+	clip: Clip!
+}
+
+# =================================== >>>
+# =================================== >>> Taxonomies
+# =================================== >>>
+
+type Tag {
+	old_id: String
+	name: String! @unique
+	posts: [Post] @relation
+	assets: [Asset] @relation
+}
+
+# =================================== >>>
+# =================================== >>> Query Series
+# =================================== >>>
+
 type Query {
-	Models: [Model!]!
-	findModelByModel(model: String!): Model
+	Infos: [Info!]!
 	Users: [User!]!
 	Routes: [Route!]!
-	Tags: [Tag!]!
 	Posts: [Post!]!
 	Assets: [Asset!]!
 	AssetGroups: [AssetGroup!]!
+	Modals: [Modal!]!
+	Clips: [Clip!]!
+	Intervals: [Interval!]!
+	Tags: [Tag!]!
+
+	findInfoByCollection(collection: String!): Info
+	findPostBySlug(slug: String!): Post
 }
