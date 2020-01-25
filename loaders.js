@@ -1,6 +1,9 @@
 const { red } = require('ansi-colors')
 const fetch = require('node-fetch')
 
+// TEMPORARYYYYYY!!!!!
+process.env.LYNX_FAUNADB_API_KEY = 'fnADir2x0wACCvARZFnAqPxFO5FJTmOPnvIlcuuU'
+
 module.exports = {
 
 	graphql: async function(query, variables) {
@@ -9,6 +12,7 @@ module.exports = {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
+					'X-Schema-Preview': 'partial-update-mutation',
 					Authorization: 'Bearer ' + process.env.LYNX_FAUNADB_API_KEY,
 				},
 				body: JSON.stringify({ query, variables }),
