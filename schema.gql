@@ -71,9 +71,10 @@ type Asset {
 	subject: String
 	year: Int
 	poster: Asset
-	tags: [Tag] @relation
 	posts: [Post] @relation
 	asset_groups: [AssetGroup] @relation
+	clips: [Clip] @relation
+	tags: [Tag] @relation
 }
 type AssetGroup {
 	old_id: String
@@ -101,6 +102,7 @@ type Clip {
 	name: String
 	type: String
 	styles: String
+	assets: [Asset] @relation
 	intervals: [Interval!] @relation
 	children: [Clip!]
 	# parent: Clip
@@ -143,4 +145,5 @@ type Query {
 
 	findInfoByCollection(collection: String!): Info
 	findPostBySlug(slug: String!): Post
+	findAssetGroupBySlug(slug: String!): AssetGroup
 }
