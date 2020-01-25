@@ -14,8 +14,12 @@ module.exports = async function({ page, page_size, tags, type, decade, subject, 
 					assets { data {
 						id: _id url summary handle mime_type filename
 						poster { url summary handle mime_type filename }
-						content_type year subject
 					} }
+					content_type
+					year
+					subject
+					tags { data { name } }
+					source
 				}
 			}
 		}`
@@ -24,6 +28,7 @@ module.exports = async function({ page, page_size, tags, type, decade, subject, 
 
 		const items = res.AssetGroups.data.map(group => {
 			group.assets = group.assets.data.map(asset => asset)
+			group.tags = group.tags.data.map(tag => tag.name)
 			return group
 		})
 

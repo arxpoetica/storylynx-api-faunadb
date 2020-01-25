@@ -11,20 +11,22 @@ module.exports = async function({ slug }) {
 				summary
 				html
 				assets { data {
-					id: _id url summary handle filename width height mime_type source
-					content_type year subject
-					tags { data { name } }
+					id: _id url summary handle filename width height mime_type
 				} }
+				content_type
+				year
+				subject
+				tags { data { name } }
+				source
 			}
 		}`
 		const res = await graphql(query)
 		if (res.error) { throw new Error(res.message) }
 
 		const asset_group = res.findAssetGroupBySlug
-		asset_group.assets = asset_group.assets.data.map(asset => {
-			asset.tags = asset.tags.data.map(tag => tag.name)
-			return asset
-		})
+		asset_group.assets = asset_group.assets.data
+		asset_group.tags = asset_group.tags.data.map(tag => tag.name)
+
 		return { asset_group }
 
 	} catch (error) {

@@ -63,18 +63,10 @@ type Asset {
 	mime_type: String
 	summary: String
 	source: String
-
-	# NEED TO HAVE A DISCUSSION WITH NATHANIEL ABOUT THIS:
-	# OR JUST FIGURE IT OUT AND LET HIM KNOW
-	# ACTUALLY, I ALREADY KNOW. It's an aggregation of any type that has a video / or image
-	content_type: String
-	subject: String
-	year: Int
 	poster: Asset
 	posts: [Post] @relation
 	asset_groups: [AssetGroup] @relation
 	clips: [Clip] @relation
-	tags: [Tag] @relation
 }
 type AssetGroup {
 	old_id: String
@@ -85,6 +77,14 @@ type AssetGroup {
 	summary: String
 	html: String # does this belong with the asset????????
 	assets: [Asset!] @relation # remember to go fix for that one linked asset
+
+	# TODO: we're going to have to figure out a better taxonomy strategy
+	# BUT THIS APPROACH is currently backward compatible sad face 🙃
+	source: String
+	content_type: String
+	subject: String
+	year: Int
+	tags: [Tag] @relation
 }
 
 # =================================== >>>
@@ -124,7 +124,7 @@ type Tag {
 	old_id: String
 	name: String! @unique
 	posts: [Post] @relation
-	assets: [Asset] @relation
+	asset_groups: [AssetGroup] @relation
 }
 
 # =================================== >>>
