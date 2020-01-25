@@ -1,6 +1,3 @@
-// TEMPORARYYYYYY!!!!!
-process.env.LYNX_FAUNADB_API_KEY = 'fnADir2x0wACCvARZFnAqPxFO5FJTmOPnvIlcuuU'
-
 const { yellow, red } = require('ansi-colors')
 const faunadb = require('faunadb')
 const q = faunadb.query

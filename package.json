@@ -5,6 +5,11 @@
   "repository": "git@github.com:arxpoetica/storylynx-api-faunadb.git",
   "author": "@arxpoetica",
   "license": "MIT",
+  "scripts": {
+    "create:all": "LYNX_FAUNADB_API_KEY=fnADir2x0wACCvARZFnAqPxFO5FJTmOPnvIlcuuU node -e 'require(\"./scripts/_CREATE_ALL.js\")()'",
+    "create:all:live": "LYNX_FAUNADB_API_KEY=fnADir2x0wACCvARZFnAqPxFO5FJTmOPnvIlcuuU node -e 'require(\"./scripts/_CREATE_ALL.js\")(true)'",
+    "delete:all": "LYNX_FAUNADB_API_KEY=fnADir2x0wACCvARZFnAqPxFO5FJTmOPnvIlcuuU node scripts/_DELETE_CONTENT.js"
+  },
   "dependencies": {
     "ansi-colors": "4.1.1",
     "faunadb": "2.10.2",
