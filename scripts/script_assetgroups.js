@@ -22,7 +22,7 @@ module.exports = async(live_run) => {
 			const summary = group.summary ? `summary: ${JSON.stringify(group.summary)}` : ''
 			const html = group.detail && group.detail.html ? `html: ${JSON.stringify(group.detail.html)}` : ''
 			const source = group.source ? `source: "${group.source}"` : ''
-			const content_type = group.content_type ? `content_type: "${group.content_type}"` : ''
+			const content_type = group.contentType ? `content_type: "${group.contentType}"` : ''
 			const subject = group.subject ? `subject: "${group.subject}"` : ''
 			const year = group.year ? `year: ${group.year}` : ''
 
