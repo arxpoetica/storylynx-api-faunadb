@@ -5,6 +5,10 @@
   "repository": "git@github.com:arxpoetica/storylynx-api-faunadb.git",
   "author": "@arxpoetica",
   "license": "MIT",
+  "scripts": {
+    "dev:init": "scripts/fauna-dev-setup.sh",
+    "dev:dashboard": "cd dashboard && PORT=8900 yarn run start"
+  },
   "dependencies": {
     "ansi-colors": "4.1.1",
     "faunadb": "2.10.2",
