@@ -6,12 +6,28 @@
   "author": "@arxpoetica",
   "license": "MIT",
   "scripts": {
-    "dev:init": "scripts/fauna-dev-setup.sh",
-    "dev:dashboard": "cd dashboard && PORT=8900 yarn run start"
+    "dev:init": "dev/fauna-dev-setup.sh",
+    "dev:dashboard": "cd dashboard && PORT=8900 yarn run start",
+    "m:up": "node -r esm dev/migration-shell",
+    "m:up:all": "node -r esm dev/migration-shell",
+    "m:down": "node -r esm dev/migration-shell",
+    "m:down:all": "node -r esm dev/migration-shell",
+    "m:create": "node -r esm dev/migration-shell",
+    "m:list": "node -r esm dev/migration-shell",
+    "m:dry:up": "node -r esm dev/migration-shell",
+    "m:dry:down": "node -r esm dev/migration-shell"
   },
   "dependencies": {
     "ansi-colors": "4.1.1",
     "faunadb": "2.10.2",
     "node-fetch": "2.6.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-env": "1.7.0",
+    "babel-register": "6.26.0",
+    "esm": "3.2.25",
+    "migrate": "1.6.2",
+    "tiny-glob": "0.2.6"
   }
 }
