@@ -1,36 +1,30 @@
-const { graphql } = require('../../loaders.js')
+const { cms_query } = require('../../loaders.js')
 
 module.exports = async function({ slug }) {
 
-	try {
-		const query = `query {
-			findAssetGroupBySlug(slug: "${slug}") {
-				id: _id
-				published
-				title
+	const { asset_group } = await cms_query(`{
+		asset_group: resource(where: { slug: "${slug}" }) {
+			id
+			published: publishedDatetime
+			title
+			summary
+			detail { html }
+			assets { id url summary handle filename: fileName width height mime_type: mimeType }
+			asset_links: assetLinks {
 				summary
-				html
-				assets { data {
-					id: _id url summary handle filename width height mime_type
-				} }
-				content_type
-				year
-				subject
-				tags { data { name } }
-				source
+				link
+				cover { url handle }
 			}
-		}`
-		const res = await graphql(query)
-		if (res.error) { throw new Error(res.message) }
+			tags { name: tag }
+			content_type: contentType
+			year
+			subject
+			source
+		}
+	}`)
 
-		const asset_group = res.findAssetGroupBySlug
-		asset_group.assets = asset_group.assets.data
-		asset_group.tags = asset_group.tags.data.map(tag => tag.name)
+	asset_group.tags = asset_group.tags.map(tag => tag.name)
 
-		return { asset_group }
-
-	} catch (error) {
-		console.log(error)
-	}
+	return { asset_group }
 
 }
