@@ -13,7 +13,7 @@ module.exports = async function({ username, password }) {
 	}
 
 	const answer = await cms_query(`{
-		account(where: { username: "${username}" }) {
+		user: account(where: { username: "${username}" }) {
 			username
 			hash
 			salt
@@ -27,22 +27,22 @@ module.exports = async function({ username, password }) {
 	// further checks, including password...
 	if (answer.error) {
 		return { error: 'Something went wrong. Please contact the code wizards 🧙‍♂️.' }
-	} else if (!answer.account) {
+	} else if (!answer.user) {
 		return { error: 'User not found.' }
 	}
 
-	const { account } = answer
+	const { user } = answer
 	// FIXME: (un)salt this
-	const match = await bcrypt.compare(password, account.hash)
+	const match = await bcrypt.compare(password, user.hash)
 	if (!match) {
 		return { error: 'Incorrect password.' }
 	}
 
 	return {
-		role: account.role,
-		first: account.first,
-		last: account.last,
-		avatar: account.avatar,
+		role: user.role,
+		first: user.first,
+		last: user.last,
+		avatar: user.avatar,
 	}
 
 }

@@ -6,12 +6,12 @@ module.exports = async function({ sort }) {
 		items: accounts(orderBy: username_${sort.toUpperCase()}) {
 			username
 			role
-			firstName
-			lastName
+			first
+			last
 			avatar { url summary handle }
 		}
-		accountsConnection { aggregate {count} }
+		accountsConnection { aggregate { count } }
 	}`)
-	return { items, itemsCount: accountsConnection.aggregate.count }
+	return { items, items_count: accountsConnection.aggregate.count }
 
 }
