@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev:init": "dev/fauna-dev-setup.sh",
+    "dev:teardown": "dev/fauna-dev-teardown.sh",
     "dev:dashboard": "cd dashboard && PORT=8900 yarn run start",
     "m:up": "node -r esm dev/migration-shell",
     "m:up:all": "node -r esm dev/migration-shell",
@@ -19,7 +20,8 @@
   },
   "dependencies": {
     "ansi-colors": "4.1.1",
-    "faunadb": "2.10.2",
+    "bcryptjs": "2.4.3",
+    "faunadb": "2.13.0",
     "node-fetch": "2.6.0"
   },
   "devDependencies": {
