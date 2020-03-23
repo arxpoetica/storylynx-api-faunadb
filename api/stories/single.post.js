@@ -23,10 +23,20 @@ module.exports = async function({ title }) {
 						template
 						themes
 						transition
-						assets { id handle url source summary height width size mime_type: mimeType }
 						asset_groups: assetGroups(orderBy: order_ASC) {
 							order
-							assets { id handle url source summary height width size mime_type: mimeType }
+							assets {
+								id
+								handle
+								url
+								source
+								summary
+								height
+								width
+								size
+								mime_type: mimeType
+								bg_pos: backgroundPosition
+							}
 							# links // NOTE: will use in the near future for vimeo, etc.
 							html_blocks: htmlBlocks { html }
 						}
