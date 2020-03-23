@@ -101,9 +101,9 @@ type Modal {
 type Clip {
 	name: String
 	type: String
-	styles: String
+	# styles: String
 	assets: [Asset] @relation
-	intervals: [Interval!] @relation
+	# intervals: [Interval!] @relation
 	children: [Clip!]
 	# parent: Clip
 	modal: Modal! @relation(name: "modal_clips")
@@ -140,7 +140,7 @@ type Query {
 	AssetGroups: [AssetGroup!]!
 	Modals: [Modal!]!
 	Clips: [Clip!]!
-	Intervals: [Interval!]!
+	# Intervals: [Interval!]!
 	Tags: [Tag!]!
 
 	findInfoByCollection(collection: String!): Info

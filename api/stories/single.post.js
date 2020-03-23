@@ -12,26 +12,24 @@ module.exports = async function({ title }) {
 				id
 				title
 				order
-				styles
-				html { html }
-				sequences: children {
+				sequences: children(orderBy: order_ASC) {
 					id
 					title
 					order
-					styles
-					html { html }
-					clips: children {
+					clips: children(orderBy: order_ASC) {
 						id
 						title
 						order
 						template
 						themes
 						transition
-						styles
-						html { html }
 						assets { id handle url source summary height width size mime_type: mimeType }
-						# intervals { id }
-						# children {}
+						asset_groups: assetGroups(orderBy: order_ASC) {
+							order
+							assets { id handle url source summary height width size mime_type: mimeType }
+							# links // NOTE: will use in the near future for vimeo, etc.
+							html_blocks: htmlBlocks { html }
+						}
 					}
 				}
 			}
@@ -40,26 +38,22 @@ module.exports = async function({ title }) {
 
 	// FIXME: I'd really like to have a way to cache all of this...
 	// TODO: how deep will this go? fine for now
-	story.rootclip.html = story.rootclip.html.html
-	story.rootclip.sequences = story.rootclip.sequences
-		.map(sequence => {
-			sequence.html = sequence.html.html
-			sequence.clips = sequence.clips
-				.map(clip => {
-					clip.html = clip.html.html
-					clip.template = clip.template || 'Column'
-					return clip
+	story.rootclip.sequences = story.rootclip.sequences.map(sequence => {
+		sequence.clips = sequence.clips.map(clip => {
+			clip.template = clip.template || 'Column1'
+			clip.asset_groups.map(group => {
+				group.html_blocks = group.html_blocks.map(block => {
+					block.mime_type = 'text/html'
+					return block
 				})
-				.sort((clip_a, clip_b) => clip_a.order.localeCompare(clip_b.order, undefined, {
-					numeric: true,
-					sensitivity: 'base',
-				}))
-			return sequence
+				group.assets = group.assets.concat(group.html_blocks)
+				delete group.html_blocks
+				return group
+			})
+			return clip
 		})
-		.sort((seq_a, seq_b) => seq_a.order.localeCompare(seq_b.order, undefined, {
-			numeric: true,
-			sensitivity: 'base',
-		}))
+		return sequence
+	})
 
 	return { story }
 
