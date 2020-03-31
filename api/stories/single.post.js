@@ -39,6 +39,7 @@ module.exports = async function({ title }) {
 							}
 							# links // NOTE: will use in the near future for vimeo, etc.
 							html_blocks: htmlBlocks { html }
+							transition
 						}
 					}
 				}
