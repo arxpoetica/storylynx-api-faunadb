@@ -52,7 +52,7 @@ module.exports = async function({ title }) {
 	story.rootclip.sequences = story.rootclip.sequences.map(sequence => {
 		sequence.clips = sequence.clips.map(clip => {
 			clip.template = clip.template || 'Column1'
-			clip.asset_groups.map(group => {
+			clip.asset_groups = clip.asset_groups.map(group => {
 				group.html_blocks = group.html_blocks.map(block => {
 					block.mime_type = 'text/html'
 					return block
