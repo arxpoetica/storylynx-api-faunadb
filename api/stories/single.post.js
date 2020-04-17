@@ -10,20 +10,20 @@ module.exports = async function({ title }) {
 			title
 			rootclip {
 				id
-				title
+				slug
 				order
 				sequences: children(orderBy: order_ASC) {
 					id
-					title
+					slug
 					order
 					clips: children(orderBy: order_ASC) {
 						id
-						title
+						slug
 						order
 						template
-						themes
+						theme_elements: themeElements
 						transition
-						asset_groups: assetGroups(orderBy: order_ASC) {
+						assets_bin: assetsBin(orderBy: order_ASC) {
 							order
 							assets {
 								id
@@ -52,7 +52,7 @@ module.exports = async function({ title }) {
 	story.rootclip.sequences = story.rootclip.sequences.map(sequence => {
 		sequence.clips = sequence.clips.map(clip => {
 			clip.template = clip.template || 'Column1'
-			clip.asset_groups = clip.asset_groups.map(group => {
+			clip.assets_bin = clip.assets_bin.map(group => {
 				group.html_blocks = group.html_blocks.map(block => {
 					block.mime_type = 'text/html'
 					// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...

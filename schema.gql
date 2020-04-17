@@ -65,7 +65,7 @@ type Asset {
 	source: String
 	poster: Asset
 	posts: [Post] @relation
-	asset_groups: [AssetGroup] @relation
+	assets_bin: [AssetGroup] @relation
 	clips: [Clip] @relation
 }
 type AssetGroup {
@@ -124,7 +124,7 @@ type Tag {
 	old_id: String
 	name: String! @unique
 	posts: [Post] @relation
-	asset_groups: [AssetGroup] @relation
+	assets_bin: [AssetGroup] @relation
 }
 
 # =================================== >>>
