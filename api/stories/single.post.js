@@ -36,6 +36,7 @@ module.exports = async function({ title }) {
 								size
 								mime_type: mimeType
 								bg_pos: backgroundPosition
+								volume
 							}
 							# links // NOTE: will use in the near future for vimeo, etc.
 							html_blocks: htmlBlocks { html }
@@ -52,8 +53,8 @@ module.exports = async function({ title }) {
 	story.rootclip.sequences = story.rootclip.sequences.map(sequence => {
 		sequence.clips = sequence.clips.map(clip => {
 			clip.template = clip.template || 'Column1'
-			clip.assets_bin = clip.assets_bin.map(group => {
-				group.html_blocks = group.html_blocks.map(block => {
+			clip.assets_bin = clip.assets_bin.map(bin => {
+				bin.html_blocks = bin.html_blocks.map(block => {
 					block.mime_type = 'text/html'
 					// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
 					// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
@@ -63,9 +64,16 @@ module.exports = async function({ title }) {
 					block.html = block.html.replace(/<p><\/p>/gi, '')
 					return block
 				})
-				group.assets = group.assets.concat(group.html_blocks)
-				delete group.html_blocks
-				return group
+				bin.assets = bin.assets.map(asset => {
+					// clamping volume putting in range between 0 and 1
+					if (asset.volume) {
+						asset.volume = Math.max(Math.min(asset.volume / 10, 1), 0)
+					}
+					return asset
+				})
+				bin.assets = bin.assets.concat(bin.html_blocks)
+				delete bin.html_blocks
+				return bin
 			})
 			return clip
 		})
