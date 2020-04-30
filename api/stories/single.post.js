@@ -2,55 +2,64 @@ const { cms_query } = require('../../loaders.js')
 
 module.exports = async function({ title }) {
 
-	// TODO: maybe just return story, root clip, and sequence IDs
-	// -- load sequences seperately???
+
 	const { story } = await cms_query(`query {
 		story(where: { title: "${title.toLowerCase()}" }) {
 			id
 			title
-			rootclip {
+			slug
+			sequences(orderBy: order_ASC) {
 				id
 				slug
 				order
-				sequences: children(orderBy: order_ASC) {
+				clips(orderBy: order_ASC) {
 					id
 					slug
 					order
-					clips: children(orderBy: order_ASC) {
-						id
-						slug
+					template
+					theme_elements: themeElements
+					transition
+					assets_bin: assetsBin(orderBy: order_ASC) {
 						order
-						template
-						theme_elements: themeElements
-						transition
-						assets_bin: assetsBin(orderBy: order_ASC) {
-							order
-							assets {
-								id
-								handle
-								url
-								source
-								summary
-								height
-								width
-								size
-								mime_type: mimeType
-								bg_pos: backgroundPosition
-								volume
-							}
-							# links // NOTE: will use in the near future for vimeo, etc.
-							html_blocks: htmlBlocks { html }
-							transition
+						assets {
+							id
+							handle
+							url
+							source
+							summary
+							height
+							width
+							size
+							mime_type: mimeType
+							bg_pos: backgroundPosition
+							volume
 						}
+						# links // NOTE: will use in the near future for vimeo, etc.
+						html_blocks: htmlBlocks { html }
+						transition
 					}
 				}
+				# audio_clips: audioClips(orderBy: order_ASC) {
+				# 	audio {
+				# 		id
+				# 		handle
+				# 		url
+				# 		size
+				# 		mime_type: mimeType
+				# 		volume
+				# 	}
+				# 	start_clip: startClip
+				# 	end_clip: endClip
+				# 	# TODO: throw a transition on the audio clips????
+				# 	# transition
+				# }
 			}
 		}
 	}`)
 
 	// FIXME: I'd really like to have a way to cache all of this...
 	// TODO: how deep will this go? fine for now
-	story.rootclip.sequences = story.rootclip.sequences.map(sequence => {
+	story.sequences = story.sequences.map(sequence => {
 		sequence.clips = sequence.clips.map(clip => {
 			clip.template = clip.template || 'Column1'
 			clip.assets_bin = clip.assets_bin.map(bin => {
