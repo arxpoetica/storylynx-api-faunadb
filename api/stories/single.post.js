@@ -2,7 +2,6 @@ const { cms_query } = require('../../loaders.js')
 
 module.exports = async function({ title }) {
 
-
 	const { story } = await cms_query(`query {
 		story(where: { title: "${title.toLowerCase()}" }) {
 			id
@@ -38,21 +37,23 @@ module.exports = async function({ title }) {
 						html_blocks: htmlBlocks { html }
 						transition
 					}
+					audio_clips: parentAudioClips {
+						id
+						audio_asset: audioAsset { mime_type: mimeType }
+						clips_in_range: clipsInRange(orderBy: order_ASC) { id }
+						# TODO: throw a transition on the audio clips????
+						# transition
+					}
 				}
-				# audio_clips: audioClips(orderBy: order_ASC) {
-				# 	audio {
-				# 		id
-				# 		handle
-				# 		url
-				# 		size
-				# 		mime_type: mimeType
-				# 		volume
-				# 	}
-				# 	start_clip: startClip
-				# 	end_clip: endClip
-				# 	# TODO: throw a transition on the audio clips????
-				# 	# transition
-				# }
+				audio_clips: audioClips {
+					id
+					audio_asset: audioAsset {
+						url
+						mime_type: mimeType
+						volume
+					}
+					# clips_in_range: clipsInRange(orderBy: order_ASC) { id }
+				}
 			}
 		}
 	}`)
@@ -86,6 +87,12 @@ module.exports = async function({ title }) {
 			})
 			return clip
 		})
+		for (let audio_clip of sequence.audio_clips) {
+			const volume = audio_clip.audio_asset.volume
+			if (volume) {
+				audio_clip.audio_asset.volume = Math.max(Math.min(volume / 10, 1), 0)
+			}
+		}
 		return sequence
 	})
 
