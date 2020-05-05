@@ -6,7 +6,7 @@ module.exports = async function({ changes }) {
 	data += changes.status ? `status: ${changes.status} ` : ''
 	data += changes.title ? `title: "${changes.title}" ` : ''
 	data += changes.slug ? `slug: "${changes.slug}" ` : ''
-	data += `publishedDatetime: "${changes.publishedDatetime ? changes.publishedDatetime : (new Date()).toISOString()}" `
+	data += `publishedDatetime: "${changes.published ? changes.published : (new Date()).toISOString()}" `
 	data += changes.html ? `html: "${changes.html}" ` : ''
 	data += changes.summary ? `summary: "${changes.summary}" ` : ''
 	data += changes.assets ? 'assets: { connect: $assets } ' : ''
@@ -16,16 +16,16 @@ module.exports = async function({ changes }) {
 	if (changes.assets || changes.tags) {
 		create += 'create('
 		create += changes.assets ? '$assets: [AssetWhereUniqueInput!] ' : ''
-		create += changes.tags ? '$tags: [ArticleTagWhereUniqueInput!] ' : ''
+		create += changes.tags ? '$tags: [PostTagWhereUniqueInput!] ' : ''
 		create += ')'
 	}
 
 	const mutation = `
 		mutation ${create} {
-			createArticle( data: { ${data} } ) {
+			createPost( data: { ${data} } ) {
 				id
 				status
-				publishedDatetime
+				published: publishedDatetime
 				title
 				slug
 				html

@@ -6,7 +6,7 @@ module.exports = async function({ id, changes }) {
 	data += changes.status ? `status: ${changes.status} ` : ''
 	data += changes.title ? `title: "${changes.title}" ` : ''
 	data += changes.slug ? `slug: "${changes.slug}" ` : ''
-	data += changes.publishedDatetime ? `publishedDatetime: "${changes.publishedDatetime}" ` : ''
+	data += changes.published ? `publishedDatetime: "${changes.published}" ` : ''
 	data += changes.html ? `html: "${changes.html}" ` : ''
 	data += changes.summary ? `summary: "${changes.summary}" ` : ''
 	data += changes.assets ? 'assets: { set: $assets } ' : ''
@@ -28,7 +28,7 @@ module.exports = async function({ id, changes }) {
 			) {
 				id
 				status
-				publishedDatetime
+				published: publishedDatetime
 				title
 				slug
 				html

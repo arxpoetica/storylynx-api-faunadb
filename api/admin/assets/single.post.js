@@ -6,7 +6,7 @@ module.exports = async function({ id }) {
 		asset: resource(where: { id: "${id}" }) {
 			id
 			status
-			publishedDatetime
+			published: publishedDatetime
 			title
 			slug
 			html

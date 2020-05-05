@@ -12,7 +12,7 @@ module.exports = async function({ page, page_size, tags }) {
 	}
 
 	const { posts, meta } = await cms_query(`{
-		posts: articles(
+		posts: posts(
 			first: ${page_size},
 			skip: ${(page - 1) * page_size},
 			where: ${where},
@@ -27,7 +27,7 @@ module.exports = async function({ page, page_size, tags }) {
 			tags { name: tag }
 		}
 
-		meta: articlesConnection(where: ${where}) { aggregate { count } }
+		meta: postsConnection(where: ${where}) { aggregate { count } }
 	}`)
 
 	const items = posts.map(post => {

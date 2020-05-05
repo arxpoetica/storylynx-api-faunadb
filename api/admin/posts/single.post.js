@@ -6,7 +6,7 @@ module.exports = async function({ id }) {
 		post(where: { id: "${id}" }) {
 			id
 			status
-			publishedDatetime
+			published: publishedDatetime
 			title
 			slug
 			html
@@ -14,7 +14,7 @@ module.exports = async function({ id }) {
 			assets { id url summary handle fileName }
 			tags { id tag }
 		}
-		post_tags: articleTags { id tag }
+		post_tags: postTags { id tag }
 	}`)
 	return { post, post_tags }
 

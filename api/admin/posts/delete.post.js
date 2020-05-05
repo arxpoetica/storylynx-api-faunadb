@@ -5,7 +5,7 @@ module.exports = async function({ ids }) {
 	const concatenatedIds = ids.map(id => `"${id}"`).join(', ')
 	const mutation = `
 		mutation {
-			deleteManyArticles(where: {
+			deleteManyPosts(where: {
 				id_in: [${concatenatedIds}]
 			}) { count }
 		}
