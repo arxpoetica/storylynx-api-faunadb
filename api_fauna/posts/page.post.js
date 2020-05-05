@@ -35,8 +35,8 @@ module.exports = async function({ page, page_size, tags }) {
 		console.log(error)
 	}
 
-	// const { articles, articlesConnection } = await cms_query(`{
-	// 	articles(
+	// const { posts, postsConnection } = await cms_query(`{
+	// 	posts(
 	// 		first: ${page_size},
 	// 		skip: ${(page - 1) * page_size},
 	// 		where: ${where},
@@ -51,7 +51,7 @@ module.exports = async function({ page, page_size, tags }) {
 	// 		tags { tag }
 	// 	}
 
-	// 	articlesConnection(where: ${where}) { aggregate { count } }
+	// 	postsConnection(where: ${where}) { aggregate { count } }
 	// }`)
 
 }

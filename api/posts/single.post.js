@@ -2,7 +2,7 @@ const { cms_query } = require('../../loaders.js')
 
 module.exports = async function({ slug }) {
 	const { post } = await cms_query(`query {
-		post: article(where: { slug: "${slug}" }) {
+		post: post(where: { slug: "${slug}" }) {
 			slug
 			headline
 			subheadline

@@ -1,22 +1,23 @@
 const { cms_mutate, create_where } = require('../../../loaders.js')
 
-module.exports = async function({ page, pageSize, tags, status, column, sort }) {
-
+module.exports = async function({ page, page_size, tags, status, column, sort }) {
 	const resources_where = create_where({ status, tags })
+	column = column === 'published' ? 'publishedDatetime' : column
+
 	const draft_where = create_where({ status: ['DRAFT'] })
 	const published_where = create_where({ status: ['PUBLISHED'] })
 	const archived_where = create_where({ status: ['ARCHIVED'] })
 
 	const query = `{
 		resources(
-			first: ${pageSize}
-			skip: ${(page - 1) * pageSize}
+			first: ${page_size}
+			skip: ${(page - 1) * page_size}
 			${resources_where}
 			orderBy: ${column}_${sort.toUpperCase()}
 		) {
 			id
 			status
-			publishedDatetime
+			published: publishedDatetime
 			title
 			summary
 			html
@@ -34,10 +35,10 @@ module.exports = async function({ page, pageSize, tags, status, column, sort }) 
 
 	return {
 		items: resources,
-		itemsCount: drafts.aggregate.count + published.aggregate.count + archived.aggregate.count,
-		draftsCount: drafts.aggregate.count,
-		publishedCount: published.aggregate.count,
-		archivedCount: archived.aggregate.count,
+		items_count: drafts.aggregate.count + published.aggregate.count + archived.aggregate.count,
+		drafts_count: drafts.aggregate.count,
+		published_count: published.aggregate.count,
+		archived_count: archived.aggregate.count,
 	}
 
 }

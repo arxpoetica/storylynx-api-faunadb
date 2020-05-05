@@ -6,7 +6,7 @@ module.exports = async function({ changes }) {
 	data += changes.status ? `status: ${changes.status} ` : ''
 	data += changes.title ? `title: "${changes.title}" ` : ''
 	data += changes.slug ? `slug: "${changes.slug}" ` : ''
-	data += `publishedDatetime: "${changes.publishedDatetime ? changes.publishedDatetime : (new Date()).toISOString()}" `
+	data += `publishedDatetime: "${changes.published ? changes.published : (new Date()).toISOString()}" `
 	data += changes.html ? `html: "${changes.html}" ` : ''
 	data += changes.summary ? `summary: "${changes.summary}" ` : ''
 	data += changes.assets ? 'assets: { connect: $assets } ' : ''
@@ -25,7 +25,7 @@ module.exports = async function({ changes }) {
 			createResource( data: { ${data} } ) {
 				id
 				status
-				publishedDatetime
+				published: publishedDatetime
 				title
 				slug
 				html
