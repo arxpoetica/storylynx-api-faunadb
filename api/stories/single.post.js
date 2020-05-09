@@ -37,7 +37,7 @@ module.exports = async function({ title }) {
 						html_blocks: htmlBlocks { html }
 						transition
 					}
-					audio_clips: parentAudioClips {
+					audio_clips: parentAudioClips(where: { parentSequence: { id_not: null } }) {
 						id
 						audio_asset: audioAsset { mime_type: mimeType }
 						clips_in_range: clipsInRange(orderBy: order_ASC) { id }
