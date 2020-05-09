@@ -26,9 +26,9 @@ module.exports = async function({ title }) {
 							url
 							source
 							summary
-							height
-							width
-							size
+							width: widthOverride
+							height: heightOverride
+							contain
 							mime_type: mimeType
 							bg_pos: backgroundPosition
 							volume
