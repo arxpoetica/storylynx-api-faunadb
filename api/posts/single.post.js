@@ -11,7 +11,7 @@ module.exports = async function({ slug }) {
 			detail { html }
 			assets { id url summary handle filename: fileName width height }
 			tags { tag }
-			linkBack
+			linkback
 		}
 	}`)
 

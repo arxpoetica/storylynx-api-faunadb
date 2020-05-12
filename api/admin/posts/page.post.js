@@ -19,13 +19,11 @@ module.exports = async function({ page, page_size, tags, status, column, sort })
 			status
 			published: publishedDatetime
 			headline
-			subheadline
-			byline
-			slug
+			# subheadline
+			# byline
+			# slug
 			assets { id url summary handle mime_type: mimeType filename: fileName }
 			tags { name: tag }
-			assets { id url summary handle fileName }
-			tags { tag }
 		}
 
 		drafts: postsConnection(${draft_where}) { aggregate {count} }
