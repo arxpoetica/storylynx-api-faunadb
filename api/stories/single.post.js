@@ -14,6 +14,7 @@ module.exports = async function({ title }) {
 				clips(orderBy: order_ASC) {
 					id
 					slug
+					hide_navigation: hideNavigation
 					order
 					template
 					theme_elements: themeElements
