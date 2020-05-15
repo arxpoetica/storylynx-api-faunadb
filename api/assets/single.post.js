@@ -3,7 +3,7 @@ const { cms_query } = require('../../loaders.js')
 module.exports = async function({ slug }) {
 
 	const { asset_group } = await cms_query(`{
-		asset_group: resource(where: { slug: "${slug}" }) {
+		asset_group: assetGroup(where: { slug: "${slug}" }) {
 			id
 			published: publishedDatetime
 			title

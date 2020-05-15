@@ -28,7 +28,7 @@ module.exports = async function({ page, page_size, tags, type, decade, subject, 
 	where += '] }'
 
 	const { asset_groups, meta, content_types, subjects } = await cms_query(`{
-		asset_groups: resources(
+		asset_groups: assetGroups(
 			first: ${page_size},
 			skip: ${(page - 1) * page_size},
 			where: ${where},
@@ -52,7 +52,7 @@ module.exports = async function({ page, page_size, tags, type, decade, subject, 
 			subject
 		}
 
-		meta: resourcesConnection(where: ${where}) { aggregate { count } }
+		meta: assetGroupsConnection(where: ${where}) { aggregate { count } }
 		content_types: __type(name: "ContentTypes") { enumValues { name } }
 		subjects: __type(name: "Subjects") { enumValues { name } }
 	}`)
