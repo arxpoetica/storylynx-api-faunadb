@@ -21,7 +21,7 @@ module.exports = async function({ page, page_size, tags, type, decade, subject, 
 		where += [
 			'{ OR: [',
 			`{ title_contains: "${search_term}" }`,
-			`{ content_contains: "${search_term}" }`,
+			`{ summary_contains: "${search_term}" }`,
 			']}',
 		].join(' ')
 	}
