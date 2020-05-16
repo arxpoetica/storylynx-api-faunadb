@@ -5,7 +5,6 @@ module.exports = async function({ slug }) {
 	const { asset_group } = await cms_query(`{
 		asset_group: assetGroup(where: { slug: "${slug}" }) {
 			id
-			published: publishedDatetime
 			title
 			summary
 			detail { html }
