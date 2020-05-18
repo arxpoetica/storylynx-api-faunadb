@@ -43,7 +43,6 @@ module.exports = async function({ page, page_size, tags, type, decade, subject, 
 		) {
 			id
 			title
-			slug
 			assets {
 				cover { url summary handle mime_type: mimeType filename: fileName }
 				id url summary handle mime_type: mimeType filename: fileName
