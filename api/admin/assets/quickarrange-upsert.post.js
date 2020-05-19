@@ -3,32 +3,24 @@ const { cms_mutate } = require('../../../loaders.js')
 
 module.exports = async function({ id, title, connect_ids, disconnect_ids }) {
 
-	let assets = ''
-	if (connect_ids.length || disconnect_ids.length) {
-		assets += 'assets: { '
-		if (connect_ids.length) {
-			assets += 'connect: ['
-			assets += connect_ids.map(id => `{ id: "${id}" }`).join(' ')
-			assets += ']'
-		}
-		if (disconnect_ids.length) {
-			assets += 'disconnect: ['
-			assets += disconnect_ids.map(id => `{ id: "${id}" }`).join(' ')
-			assets += ']'
-		}
-		assets += ' }'
-	}
+	connect_ids = connect_ids.map(id => `{ id: "${id}" }`).join(' ')
+	disconnect_ids = disconnect_ids.map(id => `{ id: "${id}" }`).join(' ')
 
 	const mutation = `mutation {
-		upsert: upsertAssetGroup(
+		asset_group: upsertAssetGroup(
 			where: { id: "${id}" }
 			create: {
 				title: "${title}"
-				${assets}
+				assets: {
+					connect: [${connect_ids}]
+				}
 			}
 			update: {
 				title: "${title}"
-				${assets}
+				assets: {
+					connect: [${connect_ids}]
+					disconnect: [${disconnect_ids}]
+				}
 			}
 		) {
 			id
