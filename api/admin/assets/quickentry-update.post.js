@@ -2,6 +2,10 @@ const { cms_mutate } = require('../../../loaders.js')
 
 module.exports = async function({ id, title, summary, content_type, year, subject, source }) {
 
+	content_type = content_type === '' ? null : content_type
+	year = year === '' ? null : year
+	subject = subject === '' ? null : subject
+
 	const title_str = title !== undefined ? `title: "${title}"` : ''
 	const summary_str = summary !== undefined ? `summary: "${summary}"` : ''
 	const contentType_str = content_type !== undefined ? `contentType: ${content_type}` : ''
