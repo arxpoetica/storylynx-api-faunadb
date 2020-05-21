@@ -97,6 +97,6 @@ module.exports = async function({ title }) {
 		return sequence
 	})
 
-	return { story }
+	return story
 
 }
