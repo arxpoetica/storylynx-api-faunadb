@@ -69,32 +69,25 @@ module.exports = async function({ id }) {
 	// FIXME: I'd really like to have a way to cache all of this...
 	// TODO: how deep will this go? fine for now
 
-	// sequence.clips = sequence.clips.map(clip => {
-	// 	clip.template = clip.template || 'Column1'
-	// 	clip.assets_bin = clip.assets_bin.map(bin => {
-	// 		bin.html_blocks = bin.html_blocks.map(block => {
-	// 			block.mime_type = 'text/html'
-	// 			// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
-	// 			// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
-	// 			// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
-	// 			// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
-	// 			// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
-	// 			block.html = block.html.replace(/<p><\/p>/gi, '')
-	// 			return block
-	// 		})
-	// 		bin.assets = bin.assets.map(asset => {
-	// 			// clamping volume putting in range between 0 and 1
-	// 			if (asset.volume) {
-	// 				asset.volume = Math.max(Math.min(asset.volume / 10, 1), 0)
-	// 			}
-	// 			return asset
-	// 		})
-	// 		bin.assets = bin.assets.concat(bin.html_blocks)
-	// 		delete bin.html_blocks
-	// 		return bin
-	// 	})
-	// 	return clip
-	// })
+	sequence.clips = sequence.clips.map(clip => {
+		// clip.template = clip.template || 'Column1'
+		clip.asset_bins = clip.asset_bins.map(bin => {
+			if (bin.html_block && bin.html_block.html_code) {
+				bin.html_block.html_code = JSON.parse(bin.html_block.html_code)
+			}
+			// bin.assets = bin.assets.map(asset => {
+			// 	// clamping volume putting in range between 0 and 1
+			// 	if (asset.volume) {
+			// 		asset.volume = Math.max(Math.min(asset.volume / 10, 1), 0)
+			// 	}
+			// 	return asset
+			// })
+			// bin.assets = bin.assets.concat(bin.html_blocks)
+			// delete bin.html_blocks
+			return bin
+		})
+		return clip
+	})
 	// for (let audio_clip of sequence.audio_clips) {
 	// 	const volume = audio_clip.audio_asset.volume
 	// 	if (volume) {
