@@ -26,7 +26,7 @@ module.exports = {
 	// DELETE THESE WHEN DONE:
 	// DELETE THESE WHEN DONE:
 
-	cms_query: async function(query) {
+	cms_query: async function(query, variables) {
 		try {
 			const res = await fetch(process.env.LYNX_GRAPHCMS_ENDPOINT, {
 				method: 'POST',
@@ -34,7 +34,7 @@ module.exports = {
 					'Content-Type': 'application/json',
 					Authorization: 'Bearer ' + process.env.LYNX_GRAPHCMS_TOKEN,
 				},
-				body: JSON.stringify({ query }),
+				body: JSON.stringify({ query, variables }),
 			})
 			const json = await res.json()
 			if (json.errors) { throw Error(json.errors.map(err => `  ${err.message}`).join('\n')) }
@@ -59,7 +59,7 @@ module.exports = {
 			if (json.errors) { throw Error(json.errors.map(err => `  ${err.message}`).join('\n')) }
 			return json.data
 		} catch (error) {
-			console.log(require('ansi-colors').red('cmsMutate Errors:\n'), error.message)
+			console.log(require('ansi-colors').red('cms_mutate Errors:\n'), error.message)
 			return { error: 1, message: error.message }
 		}
 	},
