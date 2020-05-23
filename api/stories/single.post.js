@@ -36,8 +36,8 @@ module.exports = async function({ title }) {
 							volume
 						}
 						# links // NOTE: will use in the near future for vimeo, etc.
-						html_blocks: htmlBlocks { html }
 						transition
+						html_block: htmlBlock { template html }
 					}
 					audio_clips: parentAudioClips(where: { parentSequence: { id_not: null } }) {
 						id
@@ -66,16 +66,6 @@ module.exports = async function({ title }) {
 		sequence.clips = sequence.clips.map(clip => {
 			clip.template = clip.template || 'Column1'
 			clip.assets_bin = clip.assets_bin.map(bin => {
-				bin.html_blocks = bin.html_blocks.map(block => {
-					block.mime_type = 'text/html'
-					// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
-					// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
-					// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
-					// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
-					// FIXME: THIS IS HORRIBLY INEFFICIENT...but then again, when we move to FaunaDB it won't be an issue...
-					block.html = block.html.replace(/<p><\/p>/gi, '')
-					return block
-				})
 				bin.assets = bin.assets.map(asset => {
 					// clamping volume putting in range between 0 and 1
 					if (asset.volume) {
@@ -83,8 +73,11 @@ module.exports = async function({ title }) {
 					}
 					return asset
 				})
-				bin.assets = bin.assets.concat(bin.html_blocks)
-				delete bin.html_blocks
+				if (bin.html_block) {
+					bin.html_block.mime_type = 'text/html'
+					bin.assets.push(bin.html_block)
+					delete bin.html_block
+				}
 				return bin
 			})
 			return clip
