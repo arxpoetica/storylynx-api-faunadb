@@ -28,17 +28,17 @@ module.exports = async function() {
 		}
 
 		content_types: __type(name: "ContentTypes") {
-			values: enumValues { value: name }
+			values: enumValues { name }
 		}
 		subjects: __type(name: "Subjects") {
-			values: enumValues { value: name }
+			values: enumValues { name }
 		}
 
 	}`
 
 	const res = await cms_query(query)
-	res.content_types = res.content_types.values.map(value => value.value)
-	res.subjects = res.subjects.values.map(value => value.value)
+	res.content_types = res.content_types.values.map(value => value.name)
+	res.subjects = res.subjects.values.map(value => value.name)
 	res.asset_groups = res.asset_groups.map(group => {
 		group.tags = group.tags.map(tag => tag.name)
 		return group

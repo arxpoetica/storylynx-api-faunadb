@@ -2,7 +2,7 @@ const { cms_query } = require('../../../loaders.js')
 
 module.exports = async function({ id }) {
 
-	const { sequence } = await cms_query(`query {
+	const query = `query {
 
 		sequence(where: { id: "${id}" }) {
 			id
@@ -18,6 +18,7 @@ module.exports = async function({ id }) {
 				transition
 				# FIXME: this should be assetBins with an ending s and no middle s !!!!! 
 				asset_bins: assetsBin(orderBy: order_ASC) {
+					id
 					order
 					assets {
 						id
@@ -36,7 +37,9 @@ module.exports = async function({ id }) {
 					html_block: htmlBlock {
 						id
 						name
-						html_code: htmlCode
+						template
+						code
+						html
 					}
 					transition
 				}
@@ -64,17 +67,23 @@ module.exports = async function({ id }) {
 			}
 		}
 
-	}`)
+		html_templates: __type(name: "HtmlTemplates") {
+			values: enumValues { name }
+		}
+
+	}`
+
+	const res = await cms_query(query)
+	res.html_templates = res.html_templates.values.map(value => value.name)
 
 	// FIXME: I'd really like to have a way to cache all of this...
 	// TODO: how deep will this go? fine for now
 
-	sequence.clips = sequence.clips.map(clip => {
+	res.sequence.clips = res.sequence.clips.map(clip => {
 		// clip.template = clip.template || 'Column1'
 		clip.asset_bins = clip.asset_bins.map(bin => {
-			if (bin.html_block && bin.html_block.html_code) {
-				bin.html_block.html_code = JSON.parse(bin.html_block.html_code)
-			}
+			bin.html_block = bin.html_block || {}
+			bin.html_block.code = bin.html_block.code ? JSON.parse(bin.html_block.code) : {}
 			// bin.assets = bin.assets.map(asset => {
 			// 	// clamping volume putting in range between 0 and 1
 			// 	if (asset.volume) {
@@ -95,6 +104,5 @@ module.exports = async function({ id }) {
 	// 	}
 	// }
 
-	return { sequence }
-
+	return res
 }
