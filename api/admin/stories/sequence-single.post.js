@@ -38,6 +38,7 @@ module.exports = async function({ id }) {
 						id
 						name
 						template
+						color: highlightColor
 						code
 						html
 					}
@@ -71,10 +72,15 @@ module.exports = async function({ id }) {
 			values: enumValues { name }
 		}
 
+		html_colors: __type(name: "HtmlHighlightColors") {
+			values: enumValues { name }
+		}
+
 	}`
 
 	const res = await cms_query(query)
 	res.html_templates = res.html_templates.values.map(value => value.name)
+	res.html_colors = res.html_colors.values.map(value => value.name)
 
 	// FIXME: I'd really like to have a way to cache all of this...
 	// TODO: how deep will this go? fine for now

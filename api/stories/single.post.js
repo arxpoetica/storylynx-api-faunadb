@@ -37,7 +37,7 @@ module.exports = async function({ title }) {
 						}
 						# links // NOTE: will use in the near future for vimeo, etc.
 						transition
-						html_block: htmlBlock { template html }
+						html_block: htmlBlock { template color: highlightColor html }
 					}
 					audio_clips: parentAudioClips(where: { parentSequence: { id_not: null } }) {
 						id
