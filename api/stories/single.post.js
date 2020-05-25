@@ -18,7 +18,7 @@ module.exports = async function({ title }) {
 					order
 					template
 					theme_elements: themeElements
-					transition
+					transitions
 					# FIXME: this should be assetBins with an ending s and no middle s !!!!! 
 					assets_bin: assetsBin(orderBy: order_ASC) {
 						order
