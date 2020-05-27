@@ -37,7 +37,7 @@ module.exports = async function({ title }) {
 						}
 						# links // NOTE: will use in the near future for vimeo, etc.
 						transition
-						html_block: htmlBlock { template color: highlightColor html }
+						html_blocks: htmlBlocks { template color: highlightColor html }
 					}
 					audio_clips: parentAudioClips(where: { parentSequence: { id_not: null } }) {
 						id
@@ -73,11 +73,11 @@ module.exports = async function({ title }) {
 					}
 					return asset
 				})
-				if (bin.html_block) {
-					bin.html_block.mime_type = 'text/html'
-					bin.assets.push(bin.html_block)
-					delete bin.html_block
+				for (let block of bin.html_blocks) {
+					block.mime_type = 'text/html'
+					bin.assets.push(block)
 				}
+				delete bin.html_blocks
 				return bin
 			})
 			return clip

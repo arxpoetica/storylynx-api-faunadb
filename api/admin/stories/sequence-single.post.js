@@ -34,7 +34,7 @@ module.exports = async function({ id }) {
 						volume
 					}
 					# links // NOTE: will use in the near future for vimeo, etc.
-					html_block: htmlBlock {
+					html_blocks: htmlBlocks {
 						id
 						name
 						template
@@ -88,27 +88,13 @@ module.exports = async function({ id }) {
 	res.sequence.clips = res.sequence.clips.map(clip => {
 		// clip.template = clip.template || 'Column1'
 		clip.asset_bins = clip.asset_bins.map(bin => {
-			bin.html_block = bin.html_block || {}
-			bin.html_block.code = bin.html_block.code ? JSON.parse(bin.html_block.code) : {}
-			// bin.assets = bin.assets.map(asset => {
-			// 	// clamping volume putting in range between 0 and 1
-			// 	if (asset.volume) {
-			// 		asset.volume = Math.max(Math.min(asset.volume / 10, 1), 0)
-			// 	}
-			// 	return asset
-			// })
-			// bin.assets = bin.assets.concat(bin.html_blocks)
-			// delete bin.html_blocks
+			for (let block of bin.html_blocks) {
+				block.code = block.code ? JSON.parse(block.code) : {}
+			}
 			return bin
 		})
 		return clip
 	})
-	// for (let audio_clip of sequence.audio_clips) {
-	// 	const volume = audio_clip.audio_asset.volume
-	// 	if (volume) {
-	// 		audio_clip.audio_asset.volume = Math.max(Math.min(volume / 10, 1), 0)
-	// 	}
-	// }
 
 	return res
 }
