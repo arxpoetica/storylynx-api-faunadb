@@ -17,6 +17,7 @@ module.exports = async function() {
 			title
 			subject
 			content_type: contentType
+			caption
 			source
 			summary
 			# detail {
