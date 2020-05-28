@@ -40,7 +40,7 @@ module.exports = async function({ title }) {
 						}
 						# links // NOTE: will use in the near future for vimeo, etc.
 						transition
-						html_blocks: htmlBlocks { template color: highlightColor html }
+						html_blocks: htmlBlocks(orderBy: order_ASC) { template color: highlightColor html }
 					}
 					audio_clips: parentAudioClips(where: { parentSequence: { id_not: null } }) {
 						id
