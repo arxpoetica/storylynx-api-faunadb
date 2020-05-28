@@ -30,7 +30,7 @@ module.exports = async function({ title }) {
 							handle
 							url
 							source
-							summary
+							caption
 							width: widthOverride
 							height: heightOverride
 							contain
