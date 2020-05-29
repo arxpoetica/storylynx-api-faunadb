@@ -18,7 +18,7 @@ module.exports = async function({ id, asset_bin_id, name, template, color, code,
 					${color_str}
 					code: $code
 					html: $html
-					parentAssetsBin: {
+					parentAssetBin: {
 						connect: { id: "${asset_bin_id}" }
 					}
 				}
@@ -28,7 +28,7 @@ module.exports = async function({ id, asset_bin_id, name, template, color, code,
 					${color_str}
 					code: $code
 					html: $html
-					parentAssetsBin: {
+					parentAssetBin: {
 						connect: { id: "${asset_bin_id}" }
 					}
 				}

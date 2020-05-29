@@ -22,8 +22,7 @@ module.exports = async function({ title }) {
 					template_width: templateWidth
 					template_height: templateHeight
 					width_as_percent: widthAsPercent
-					# FIXME: this should be assetBins with an ending s and no middle s !!!!! 
-					assets_bin: assetsBin(orderBy: order_ASC) {
+					asset_bins: assetBins(orderBy: order_ASC) {
 						order
 						assets(orderBy: order_ASC) {
 							id
@@ -68,7 +67,7 @@ module.exports = async function({ title }) {
 	story.sequences = story.sequences.map(sequence => {
 		sequence.clips = sequence.clips.map(clip => {
 			clip.template = clip.template || 'Column1'
-			clip.assets_bin = clip.assets_bin.map(bin => {
+			clip.asset_bins = clip.asset_bins.map(bin => {
 				bin.assets = bin.assets.map(asset => {
 					// clamping volume putting in range between 0 and 1
 					if (asset.volume) {
