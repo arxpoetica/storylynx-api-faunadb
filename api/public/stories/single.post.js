@@ -1,4 +1,4 @@
-const { cms_query } = require('../../loaders.js')
+const { cms_query } = require('../../../loaders.js')
 
 module.exports = async function({ title }) {
 
