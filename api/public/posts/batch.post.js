@@ -1,6 +1,6 @@
 const { cms_query } = require('../../../loaders.js')
 
-module.exports = async function({ page, page_size, tags }) {
+module.exports = async function({ batch, batch_size, tags }) {
 
 	let where
 	if (tags && tags.length) {
@@ -11,10 +11,10 @@ module.exports = async function({ page, page_size, tags }) {
 		where = '{ status: PUBLISHED }'
 	}
 
-	const { posts, meta } = await cms_query(`{
-		posts: posts(
-			first: ${page_size},
-			skip: ${(page - 1) * page_size},
+	const { posts, connection } = await cms_query(`{
+		posts(
+			first: ${batch_size},
+			skip: ${(batch - 1) * batch_size},
 			where: ${where},
 			orderBy: publishedDatetime_DESC
 		) {
@@ -27,7 +27,16 @@ module.exports = async function({ page, page_size, tags }) {
 			tags { name: tag }
 		}
 
-		meta: postsConnection(where: ${where}) { aggregate { count } }
+		connection: postsConnection(
+			first: ${batch_size},
+			skip: ${(batch - 1) * batch_size},
+			where: ${where},
+			orderBy: publishedDatetime_DESC
+		) {
+			pageInfo {
+				hasNextPage
+			}
+		}
 	}`)
 
 	const items = posts.map(post => {
@@ -37,7 +46,7 @@ module.exports = async function({ page, page_size, tags }) {
 
 	return {
 		items,
-		items_count: meta.aggregate.count,
+		next_batch: connection.pageInfo.hasNextPage ? items[items.length - 1].id : false,
 	}
 
 }
