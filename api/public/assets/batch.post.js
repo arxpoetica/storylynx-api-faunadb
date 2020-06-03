@@ -1,6 +1,6 @@
 const { cms_query } = require('../../../loaders.js')
 
-module.exports = async function({ page, page_size, tags, type, decade, subject, search_term }) {
+module.exports = async function({ batch, batch_size, tags, type, decade, subject, search_term }) {
 
 	let where = '{ AND: ['
 	if (tags && tags.length) {
@@ -35,8 +35,8 @@ module.exports = async function({ page, page_size, tags, type, decade, subject, 
 		subjects,
 	} = await cms_query(`{
 		asset_groups: assetGroups(
-			first: ${page_size},
-			skip: ${(page - 1) * page_size},
+			first: ${batch_size},
+			skip: ${(batch - 1) * batch_size},
 			where: ${where},
 			orderBy: title_ASC
 		) {
