@@ -7,8 +7,7 @@ module.exports = async function({ changes }) {
 	data += changes.title ? `title: "${changes.title}" ` : ''
 	data += changes.slug ? `slug: "${changes.slug}" ` : ''
 	data += `publishedDatetime: "${changes.published ? changes.published : (new Date()).toISOString()}" `
-	data += changes.html ? `html: "${changes.html}" ` : ''
-	data += changes.summary ? `summary: "${changes.summary}" ` : ''
+	data += changes.detail ? `detail: "${changes.detail}" ` : ''
 	data += changes.assets ? 'assets: { connect: $assets } ' : ''
 	data += changes.tags ? 'tags: { connect: $tags } ' : ''
 
@@ -28,8 +27,7 @@ module.exports = async function({ changes }) {
 				published: publishedDatetime
 				title
 				slug
-				html
-				summary
+				detail
 				assets { id url summary handle fileName }
 				tags { id tag }
 			}

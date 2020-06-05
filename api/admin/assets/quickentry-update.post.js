@@ -1,6 +1,6 @@
 const { cms_mutate } = require('../../../loaders.js')
 
-module.exports = async function({ id, title, caption, content_type, year, subject, source, summary }) {
+module.exports = async function({ id, title, caption, content_type, year, subject, source, detail }) {
 
 	content_type = content_type === '' ? null : content_type
 	year = year === '' ? null : year
@@ -12,7 +12,7 @@ module.exports = async function({ id, title, caption, content_type, year, subjec
 	const year_str = year !== undefined ? `year: ${year}` : ''
 	const subject_str = subject !== undefined ? `subject: ${subject}` : ''
 	const source_str = source !== undefined ? `source: "${source}"` : ''
-	const summary_str = summary !== undefined ? `summary: "${summary}"` : ''
+	const detail_str = detail !== undefined ? `detail: "${detail}"` : ''
 
 	const mutation = `mutation {
 		asset_group: updateAssetGroup(
@@ -24,7 +24,7 @@ module.exports = async function({ id, title, caption, content_type, year, subjec
 				${year_str}
 				${subject_str}
 				${source_str}
-				${summary_str}
+				${detail_str}
 			}
 		) {
 			id	
@@ -34,7 +34,7 @@ module.exports = async function({ id, title, caption, content_type, year, subjec
 			# year
 			# subject
 			# source
-			# summary
+			# detail
 		}
 	}`
 

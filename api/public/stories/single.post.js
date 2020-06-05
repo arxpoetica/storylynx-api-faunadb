@@ -34,7 +34,6 @@ module.exports = async function({ title }) {
 							url
 							source
 							caption
-							# summary # talk w/ Nathaniel. I don't think we'll have a longer form description on the timeline
 							width: widthOverride
 							height: heightOverride
 							contain

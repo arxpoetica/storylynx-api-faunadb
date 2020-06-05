@@ -6,8 +6,6 @@ module.exports = async function({ id }) {
 		asset_group: assetGroup(where: { id: "${id}" }) {
 			id
 			title
-			summary
-			detail { html }
 			assets { id url summary handle filename: fileName width height mime_type: mimeType }
 			asset_links: assetLinks {
 				summary
@@ -19,6 +17,7 @@ module.exports = async function({ id }) {
 			year
 			subject
 			source
+			detail
 		}
 	}`)
 

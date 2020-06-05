@@ -20,7 +20,6 @@ module.exports = async function({ page, page_size, tags, status, column, sort })
 			published: publishedDatetime
 			title
 			summary
-			detail { html }
 			assets { id url summary handle filename: fileName }
 			tags { tag }
 		}

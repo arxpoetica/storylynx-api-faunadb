@@ -4,14 +4,6 @@ module.exports = async function() {
 
 	const query = `{
 
-		# assets {
-		# 	id
-		# 	url
-		# 	summary
-		# 	handle
-		# 	filename: fileName
-		# }
-
 		asset_groups: assetGroups(orderBy: title_ASC) {
 			id
 			title
@@ -19,10 +11,7 @@ module.exports = async function() {
 			content_type: contentType
 			caption
 			source
-			summary
-			# detail {
-			#	 html
-			# }
+			detail
 			year
 			tags { name: tag }
 			assets { id handle filename: fileName mime_type: mimeType }

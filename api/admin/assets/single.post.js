@@ -9,8 +9,7 @@ module.exports = async function({ id }) {
 			published: publishedDatetime
 			title
 			slug
-			html
-			summary
+			detail
 			assets { id url summary handle fileName }
 			externalAssets
 			tags { id tag }

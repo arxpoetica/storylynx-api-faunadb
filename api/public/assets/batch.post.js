@@ -20,7 +20,7 @@ module.exports = async function({ batch, batch_size, tags, type, decade, subject
 		where += [
 			'{ OR: [',
 			`{ title_contains: "${search_term}" }`,
-			`{ summary_contains: "${search_term}" }`,
+			`{ detail_contains: "${search_term}" }`,
 			']}',
 		].join(' ')
 	}
