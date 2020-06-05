@@ -1,14 +1,15 @@
 const { cms_query } = require('../../../loaders.js')
 
-module.exports = async function({ title }) {
+module.exports = async function({ title, slug }) {
 
 	const { story } = await cms_query(`query {
 		story(where: { title: "${title.toLowerCase()}" }) {
 			id
 			title
 			slug
-			sequences(orderBy: order_ASC) {
+			sequences(where: { slug: "${slug}" }) {
 				id
+				title
 				slug
 				order
 				clips(orderBy: order_ASC) {
@@ -63,40 +64,51 @@ module.exports = async function({ title }) {
 					# clips_in_range: clipsInRange(orderBy: order_ASC) { id }
 				}
 			}
+			navigation: sequences(orderBy: order_ASC) {
+				title
+				slug
+				order
+				subnavigation: clips(orderBy: order_ASC) {
+					slug
+					hide_navigation: hideNavigation
+					order
+				}
+			}
 		}
 	}`)
 
 	// FIXME: I'd really like to have a way to cache all of this...
 	// TODO: how deep will this go? fine for now
-	story.sequences = story.sequences.map(sequence => {
-		sequence.clips = sequence.clips.map(clip => {
-			clip.template = clip.template || 'Column1'
-			clip.asset_bins = clip.asset_bins.map(bin => {
-				bin.assets = bin.assets.map(asset => {
-					// clamping volume putting in range between 0 and 1
-					if (asset.volume) {
-						asset.volume = Math.max(Math.min(asset.volume / 10, 1), 0)
-					}
-					return asset
-				})
-				for (let block of bin.html_blocks) {
-					block.mime_type = 'text/html'
-					bin.assets.push(block)
+	story.sequence = story.sequences[0]
+	delete story.sequences
+
+	story.sequence.clips = story.sequence.clips.map(clip => {
+		clip.template = clip.template || 'Column1'
+		clip.asset_bins = clip.asset_bins.map(bin => {
+			bin.assets = bin.assets.map(asset => {
+				// clamping volume putting in range between 0 and 1
+				if (asset.volume) {
+					asset.volume = Math.max(Math.min(asset.volume / 10, 1), 0)
 				}
-				delete bin.html_blocks
-				return bin
+				return asset
 			})
-			return clip
-		})
-		for (let audio_clip of sequence.audio_clips) {
-			const volume = audio_clip.audio_asset.volume
-			if (volume) {
-				audio_clip.audio_asset.volume = Math.max(Math.min(volume / 10, 1), 0)
+			for (let block of bin.html_blocks) {
+				block.mime_type = 'text/html'
+				bin.assets.push(block)
 			}
-		}
-		return sequence
+			delete bin.html_blocks
+			return bin
+		})
+		return clip
 	})
 
-	return story
+	for (let audio_clip of story.sequence.audio_clips) {
+		const volume = audio_clip.audio_asset.volume
+		if (volume) {
+			audio_clip.audio_asset.volume = Math.max(Math.min(volume / 10, 1), 0)
+		}
+	}
+
+	return { story }
 
 }
