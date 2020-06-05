@@ -13,7 +13,7 @@ module.exports = async function({ id }) {
 			byline
 			linkback
 			detail { html }
-			assets { id url summary handle filename: fileName }
+			assets { id url caption handle filename: fileName }
 			tags { id name: tag }
 		}
 		tags { name: tag }

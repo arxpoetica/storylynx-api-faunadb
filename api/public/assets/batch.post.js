@@ -36,8 +36,8 @@ module.exports = async function({ batch, batch_size, tags, type, decade, subject
 			id
 			title
 			assets {
-				cover { url summary handle mime_type: mimeType filename: fileName }
-				id url summary handle mime_type: mimeType filename: fileName
+				cover { url caption handle mime_type: mimeType filename: fileName }
+				id url caption handle mime_type: mimeType filename: fileName
 			}
 			asset_links: assetLinks {
 				summary

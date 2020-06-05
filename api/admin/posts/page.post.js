@@ -22,7 +22,7 @@ module.exports = async function({ page, page_size, tags, status, column, sort })
 			# subheadline
 			# byline
 			# slug
-			assets { id url summary handle mime_type: mimeType filename: fileName }
+			assets { id url caption handle mime_type: mimeType filename: fileName }
 			tags { name: tag }
 		}
 

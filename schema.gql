@@ -61,7 +61,7 @@ type Asset {
 	height: Int
 	size: Long
 	mime_type: String
-	summary: String
+	caption: String
 	source: String
 	poster: Asset
 	posts: [Post] @relation
@@ -74,7 +74,7 @@ type AssetGroup {
 	published: Long!
 	title: String!
 	slug: String # believe it or not, we're not making it mandatory
-	summary: String
+	detail: String
 	html: String # does this belong with the asset????????
 	assets: [Asset!] @relation # remember to go fix for that one linked asset
 

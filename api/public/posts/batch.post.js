@@ -23,7 +23,7 @@ module.exports = async function({ batch, batch_size, tags }) {
 			headline
 			subheadline
 			slug
-			assets { id url summary handle mime_type: mimeType filename: fileName }
+			assets { id url caption handle mime_type: mimeType filename: fileName }
 			tags { name: tag }
 		}
 

@@ -23,7 +23,7 @@ module.exports = async function({ id }) {
 						id
 						handle
 						source
-						summary
+						caption
 						width: widthOverride
 						height: heightOverride
 						contain

@@ -30,7 +30,7 @@ module.exports = async function({ changes }) {
 				slug
 				html
 				summary
-				assets { id url summary handle fileName }
+				assets { id url caption handle fileName }
 				tags { id tag }
 			}
 		}

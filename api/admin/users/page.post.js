@@ -8,7 +8,7 @@ module.exports = async function({ sort }) {
 			role
 			first
 			last
-			avatar { url summary handle }
+			avatar { url caption handle }
 		}
 		accountsConnection { aggregate { count } }
 	}`)

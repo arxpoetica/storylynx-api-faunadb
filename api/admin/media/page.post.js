@@ -21,7 +21,7 @@ module.exports = async function({ page, page_size, tags }) {
 			id
 			url
 			handle
-			summary
+			caption
 			fileName
 		}
 

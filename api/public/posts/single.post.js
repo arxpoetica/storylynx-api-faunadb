@@ -9,7 +9,7 @@ module.exports = async function({ slug }) {
 			byline
 			published: publishedDatetime
 			detail { html }
-			assets { id url summary handle filename: fileName width height }
+			assets { id url caption handle filename: fileName width height }
 			tags { tag }
 			linkback
 		}

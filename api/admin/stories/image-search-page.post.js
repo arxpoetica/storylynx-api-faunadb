@@ -23,7 +23,7 @@ module.exports = async function({ search_term, size }) {
 			url
 			handle
 			filename: fileName
-			summary
+			caption
 			source
 			mime_type: mimeType
 		}

@@ -10,7 +10,7 @@ module.exports = async function({ id }) {
 			title
 			slug
 			detail
-			assets { id url summary handle fileName }
+			assets { id url caption handle fileName }
 			externalAssets
 			tags { id tag }
 		}

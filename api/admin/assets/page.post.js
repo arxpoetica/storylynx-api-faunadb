@@ -19,8 +19,8 @@ module.exports = async function({ page, page_size, tags, status, column, sort })
 			status
 			published: publishedDatetime
 			title
-			summary
-			assets { id url summary handle filename: fileName }
+			detail
+			assets { id url caption handle filename: fileName }
 			tags { tag }
 		}
 
