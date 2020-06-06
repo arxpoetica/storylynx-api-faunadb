@@ -41,6 +41,7 @@ module.exports = async function({ title, slug }) {
 							mime_type: mimeType
 							bg_pos: backgroundPosition
 							volume
+							play_once: playOnce
 						}
 						# links // NOTE: will use in the near future for vimeo, etc.
 						transition
