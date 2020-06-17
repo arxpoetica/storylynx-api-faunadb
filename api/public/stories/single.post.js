@@ -68,6 +68,7 @@ module.exports = async function({ title, slug }) {
 			navigation: sequences(orderBy: order_ASC) {
 				title
 				slug
+				hide_navigation: hideNavigation
 				order
 				subnavigation: clips(orderBy: order_ASC) {
 					slug

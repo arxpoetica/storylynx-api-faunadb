@@ -7,6 +7,7 @@ module.exports = async function({ id }) {
 		sequence(where: { id: "${id}" }) {
 			id
 			slug
+			hide_navigation: hideNavigation
 			order
 			clips(orderBy: order_ASC) {
 				id
