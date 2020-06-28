@@ -21,8 +21,9 @@ module.exports = async function() {
 		asset_groups: assetGroups(orderBy: title_ASC) {
 			id
 			title
-			assets {
+			assets(orderBy: assetGroupOrder_ASC) {
 				id
+				order: assetGroupOrder
 				handle
 				filename: fileName
 				mime_type: mimeType

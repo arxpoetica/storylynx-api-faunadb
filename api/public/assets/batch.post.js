@@ -35,7 +35,7 @@ module.exports = async function({ batch, batch_size, tags, type, decade, subject
 		) {
 			id
 			title
-			assets {
+			assets(orderBy: assetGroupOrder_ASC) {
 				cover { url caption handle mime_type: mimeType filename: fileName }
 				id url caption handle mime_type: mimeType filename: fileName
 			}

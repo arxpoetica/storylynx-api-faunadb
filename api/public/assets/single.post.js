@@ -6,7 +6,16 @@ module.exports = async function({ id }) {
 		asset_group: assetGroup(where: { id: "${id}" }) {
 			id
 			title
-			assets { id url caption handle filename: fileName width height mime_type: mimeType }
+			assets(orderBy: assetGroupOrder_ASC) {
+				id
+				url
+				caption
+				handle
+				filename: fileName
+				width
+				height
+				mime_type: mimeType
+			}
 			asset_links: assetLinks {
 				summary
 				link

@@ -1,10 +1,18 @@
 const { cms_mutate } = require('../../../loaders.js')
 
 
-module.exports = async function({ id, title, connect_ids, disconnect_ids }) {
+module.exports = async function({ id, title, connect_ids, disconnect_ids, order }) {
 
 	connect_ids = connect_ids.map(id => `{ id: "${id}" }`).join(' ')
 	disconnect_ids = disconnect_ids.map(id => `{ id: "${id}" }`).join(' ')
+
+	const order_mutations = order.map((id, index) => {
+		const num = index + 1
+		let update = `update${num}: updateAsset(`
+		update += `where: { id: "${id}" } data: { assetGroupOrder: ${num} }`
+		update += ') { id assetGroupOrder fileName }'
+		return update
+	}).join('\n')
 
 	const mutation = `mutation {
 		asset_group: upsertAssetGroup(
@@ -27,6 +35,8 @@ module.exports = async function({ id, title, connect_ids, disconnect_ids }) {
 			title
 			assets { id }
 		}
+
+		${order_mutations}
 	}`
 
 	return await cms_mutate(mutation)
