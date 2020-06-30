@@ -14,7 +14,7 @@ module.exports = async function() {
 			detail
 			year
 			tags { name: tag }
-			assets { id handle filename: fileName mime_type: mimeType }
+			assets(orderBy: assetGroupOrder_ASC) { id handle filename: fileName mime_type: mimeType }
 		}
 
 		content_types: __type(name: "ContentTypes") {
