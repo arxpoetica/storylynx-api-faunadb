@@ -17,6 +17,13 @@ module.exports = async function({ id }) {
 				template
 				theme_elements: themeElements
 				transitions
+				styles {
+					top right left bottom
+					gap
+					width: templateWidth
+					height: templateHeight
+					percent: widthAsPercent
+				}
 				asset_bins: assetBins(orderBy: order_ASC) {
 					id
 					order
