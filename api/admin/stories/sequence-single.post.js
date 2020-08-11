@@ -18,6 +18,7 @@ module.exports = async function({ id }) {
 				theme_elements: themeElements
 				transitions
 				styles {
+					id
 					top right left bottom
 					gap
 					width: templateWidth
