@@ -53,6 +53,47 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 				}` : ''}
 			}) {
 				id
+				slug
+				hide_navigation: hideNavigation
+				order
+				template
+				theme_elements: themeElements
+				transitions
+				styles {
+					id
+					top right left bottom
+					gap
+					width: templateWidth
+					height: templateHeight
+					percent: widthAsPercent
+				}
+				asset_bins: assetBins(orderBy: order_ASC) {
+					id
+					order
+					assets {
+						id
+						handle
+						source
+						caption
+						width: widthOverride
+						height: heightOverride
+						contain
+						filename: fileName
+						mime_type: mimeType
+						bg_pos: backgroundPosition
+						volume
+					}
+					# links // NOTE: will use in the near future for vimeo, etc.
+					html_blocks: htmlBlocks {
+						id
+						name
+						template
+						color: highlightColor
+						code
+						html
+					}
+					transition
+				}
 			}
 		}
 	`

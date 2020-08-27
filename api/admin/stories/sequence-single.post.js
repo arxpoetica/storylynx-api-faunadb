@@ -10,6 +10,7 @@ module.exports = async function({ id }) {
 			hide_navigation: hideNavigation
 			order
 			clips(orderBy: order_ASC) {
+				# TODO: dry this up...it's used in a few places, such as clip-duplicate.post.js
 				id
 				slug
 				hide_navigation: hideNavigation
