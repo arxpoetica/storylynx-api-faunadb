@@ -29,7 +29,7 @@
     "babel-preset-env": "1.7.0",
     "babel-register": "6.26.0",
     "esm": "3.2.25",
-    "migrate": "1.6.2",
+    "migrate": "1.7.0",
     "tiny-glob": "0.2.6"
   }
 }
