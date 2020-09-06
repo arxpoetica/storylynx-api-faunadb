@@ -26,7 +26,7 @@ module.exports = async function({ batch, batch_size, tags, type, decade, subject
 	}
 	where += '] }'
 
-	const { items, connection } = await cms_query(`{
+	let { items, connection } = await cms_query(`{
 		items: assetGroups(
 			first: ${batch_size}
 			skip: ${(batch - 1) * batch_size}
@@ -36,7 +36,8 @@ module.exports = async function({ batch, batch_size, tags, type, decade, subject
 			id
 			title
 			assets(orderBy: assetGroupOrder_ASC) {
-				cover { url caption handle mime_type: mimeType filename: fileName }
+				# FIXME: assets on assets is broken in the new API, hence the indirection, ugh
+				assetCover { asset { url caption handle mime_type: mimeType filename: fileName } }
 				id url caption handle mime_type: mimeType filename: fileName
 			}
 			asset_links: assetLinks {
@@ -60,6 +61,16 @@ module.exports = async function({ batch, batch_size, tags, type, decade, subject
 			}
 		}
 	}`)
+
+	// FIXME: this can be removed when the asset on assets fix is implemented above
+	items = items.map(item => {
+		item.assets = item.assets.map(asset => {
+			asset.cover = asset.assetCover && asset.assetCover.asset ? asset.assetCover.asset : null
+			delete asset.assetCover
+			return asset
+		})
+		return item
+	})
 
 	return {
 		items,
