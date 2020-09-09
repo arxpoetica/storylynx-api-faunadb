@@ -77,19 +77,31 @@ module.exports = async function({ id }) {
 			}
 		}
 
-		html_templates: __type(name: "HtmlTemplates") {
-			values: enumValues { name }
-		}
-
-		html_colors: __type(name: "HtmlHighlightColors") {
-			values: enumValues { name }
-		}
+		enum_templates: __type(name: "Templates") { values: enumValues { name } }
+		enum_theme_elements: __type(name: "ThemeElements") { values: enumValues { name } }
+		enum_template_transitions: __type(name: "TemplateTransitions") { values: enumValues { name } }
+		enum_html_templates: __type(name: "HtmlTemplates") { values: enumValues { name } }
+		enum_html_colors: __type(name: "HtmlHighlightColors") { values: enumValues { name } }
 
 	}`
 
 	const res = await cms_query(query)
-	res.html_templates = res.html_templates.values.map(value => value.name)
-	res.html_colors = res.html_colors.values.map(value => value.name)
+
+	res.enum_templates = res.enum_templates.values
+		.sort((one, two) => one.name.localeCompare(two.name))
+		.map((value, index) => ({ id: index, text: value.name }))
+	res.enum_theme_elements = res.enum_theme_elements.values
+		.sort((one, two) => one.name.localeCompare(two.name))
+		.map((value, index) => ({ id: index, text: value.name }))
+	res.enum_template_transitions = res.enum_template_transitions.values
+		.sort((one, two) => one.name.localeCompare(two.name))
+		.map((value, index) => ({ id: index, text: value.name }))
+	res.enum_html_templates = res.enum_html_templates.values
+		.sort((one, two) => one.name.localeCompare(two.name))
+		.map((value, index) => ({ id: index, text: value.name }))
+	res.enum_html_colors = res.enum_html_colors.values
+		.sort((one, two) => one.name.localeCompare(two.name))
+		.map((value, index) => ({ id: index, text: value.name }))
 
 	// FIXME: I'd really like to have a way to cache all of this...
 	// TODO: how deep will this go? fine for now
