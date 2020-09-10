@@ -1,3 +1,4 @@
+const { pascal_to_words } = require('../../../utils.js')
 const { cms_query } = require('../../../loaders.js')
 
 module.exports = async function({ id }) {
@@ -32,6 +33,7 @@ module.exports = async function({ id }) {
 					assets {
 						id
 						handle
+						url
 						source
 						caption
 						width: widthOverride
@@ -41,6 +43,7 @@ module.exports = async function({ id }) {
 						mime_type: mimeType
 						bg_pos: backgroundPosition
 						volume
+						play_once: playOnce
 					}
 					# links // NOTE: will use in the near future for vimeo, etc.
 					html_blocks: htmlBlocks {
@@ -87,24 +90,24 @@ module.exports = async function({ id }) {
 
 	const res = await cms_query(query)
 
-	res.enum_templates = res.enum_templates.values
-		.sort((one, two) => one.name.localeCompare(two.name))
-		.map((value, index) => ({ id: index, text: value.name }))
-	res.enum_theme_elements = res.enum_theme_elements.values
-		.sort((one, two) => one.name.localeCompare(two.name))
-		.map((value, index) => ({ id: index, text: value.name }))
-	res.enum_template_transitions = res.enum_template_transitions.values
-		.sort((one, two) => one.name.localeCompare(two.name))
-		.map((value, index) => ({ id: index, text: value.name }))
-	res.enum_html_templates = res.enum_html_templates.values
-		.sort((one, two) => one.name.localeCompare(two.name))
-		.map((value, index) => ({ id: index, text: value.name }))
-	res.enum_html_colors = res.enum_html_colors.values
-		.sort((one, two) => one.name.localeCompare(two.name))
-		.map((value, index) => ({ id: index, text: value.name }))
-
 	// FIXME: I'd really like to have a way to cache all of this...
 	// TODO: how deep will this go? fine for now
+
+	res.enum_templates = res.enum_templates.values
+		.sort((one, two) => one.name.localeCompare(two.name))
+		.map(value => ({ id: value.name, text: pascal_to_words(value.name) }))
+	res.enum_theme_elements = res.enum_theme_elements.values
+		.sort((one, two) => one.name.localeCompare(two.name))
+		.map(value => ({ id: value.name, text: pascal_to_words(value.name) }))
+	res.enum_template_transitions = res.enum_template_transitions.values
+		.sort((one, two) => one.name.localeCompare(two.name))
+		.map(value => ({ id: value.name, text: pascal_to_words(value.name) }))
+	res.enum_html_templates = res.enum_html_templates.values
+		.sort((one, two) => one.name.localeCompare(two.name))
+		.map(value => ({ id: value.name, text: pascal_to_words(value.name) }))
+	res.enum_html_colors = res.enum_html_colors.values
+		.sort((one, two) => one.name.localeCompare(two.name))
+		.map(value => ({ id: value.name, text: pascal_to_words(value.name) }))
 
 	res.sequence.clips = res.sequence.clips.map(clip => {
 		// clip.template = clip.template || 'Column1'
