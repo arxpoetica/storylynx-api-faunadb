@@ -117,6 +117,16 @@ module.exports = async function({ id }) {
 			}
 			return bin
 		})
+		clip.styles = clip.styles || {
+			top: null,
+			bottom: null,
+			left: null,
+			right: null,
+			gap: null,
+			width: null,
+			height: null,
+			percent: null,
+		}
 		return clip
 	})
 
