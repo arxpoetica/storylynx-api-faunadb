@@ -12,7 +12,6 @@ module.exports = async function({ assets }) {
 				fileName: "${fileName}"
 				size: ${size}
 				mimeType: "${mimeType}"
-				status: PUBLISHED
 			}) {
 				id
 				url

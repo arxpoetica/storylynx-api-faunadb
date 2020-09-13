@@ -52,7 +52,7 @@ module.exports = async function({ story_slug, sequence_slug, clip_id }) {
 	}`
 
 	const { story } = await cms_query(`query {
-		story(where: { title: "${story_slug}" }) {
+		story(where: { slug: "${story_slug}" }) {
 			id
 			title
 			slug

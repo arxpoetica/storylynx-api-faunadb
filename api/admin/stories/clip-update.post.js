@@ -14,29 +14,28 @@ module.exports = async function({ clip }) {
 	}).filter(Boolean).join(EOL)
 	mutation_var_defs = mutation_var_defs.length ? EOL + mutation_var_defs : ''
 
-
+	const { styles } = clip
 	const styles_mutation = () => {
-		const { styles } = clip
-		let output = ''
-		if (styles) {
-			output = 'styles: { upsert: {' + EOL
-			output += ['update', 'create'].map(type => {
-				return [
-					`${type}: {`,
-					typeof styles.top === 'number' ? `top: ${styles.top}` : null,
-					typeof styles.right === 'number' ? `right: ${styles.right}` : null,
-					typeof styles.bottom === 'number' ? `bottom: ${styles.bottom}` : null,
-					typeof styles.left === 'number' ? `left: ${styles.left}` : null,
-					typeof styles.width === 'number' ? `templateWidth: ${styles.width}` : null,
-					typeof styles.height === 'number' ? `templateHeight: ${styles.height}` : null,
-					typeof styles.percent === 'boolean' ? `widthAsPercent: ${styles.percent}` : null,
-					typeof styles.gap === 'number' ? `gap: ${styles.gap}` : null,
-					'}',
-				].filter(Boolean).join(EOL)
-			}).join(EOL) + EOL
-			output += '} }'
-		}
-		return output
+		// FIXME: this is broken...waiting for fix from GraphCMS team
+		return ''
+		// let output = ''
+		// if (styles) {
+		// 	output += ['create', 'update'].map(type => {
+		// 		return [
+		// 			`${type}: {`,
+		// 			typeof styles.top === 'number' ? `top: ${styles.top}` : null,
+		// 			typeof styles.right === 'number' ? `right: ${styles.right}` : null,
+		// 			typeof styles.bottom === 'number' ? `bottom: ${styles.bottom}` : null,
+		// 			typeof styles.left === 'number' ? `left: ${styles.left}` : null,
+		// 			typeof styles.width === 'number' ? `templateWidth: ${styles.width}` : null,
+		// 			typeof styles.height === 'number' ? `templateHeight: ${styles.height}` : null,
+		// 			typeof styles.percent === 'boolean' ? `widthAsPercent: ${styles.percent}` : null,
+		// 			typeof styles.gap === 'number' ? `gap: ${styles.gap}` : null,
+		// 			'}',
+		// 		].filter(Boolean).join(EOL)
+		// 	}).join(EOL) + EOL
+		// }
+		// return output
 	}
 
 	const mutation = `
@@ -45,51 +44,61 @@ module.exports = async function({ clip }) {
 			${mutation_var_defs}
 		) {
 			updated_clip: updateClip(where: { id: "${clip.id}" }, data: {
-
-				# status: PUBLISHED
 				slug: $slug
 				order: "${clip.order}"
 				template: ${clip.template}
 				hideNavigation: ${clip.hide_navigation}
-				themeElements: { set: [${clip.theme_elements.join(', ')}] }
-				transitions: { set: [${clip.transitions.join(', ')}] }
-				${styles_mutation()}
+				themeElements: [${clip.theme_elements.join(', ')}]
+				transitions: [${clip.transitions.join(', ')}]
+				# FIXME: this is broken...waiting for fix from GraphCMS team
+				# styles: {
+				# 	upsert: {
+				# 		where: { id: "${styles.id}" }
+				# 		data: {
+				# 			${styles_mutation()}
+				# 		}
+				# 	}
+				# }
 				assetBins: {
 					upsert: [${clip.asset_bins.map((bin, bin_i) => `{
 						where: { id: "${bin.id}" }
-						create: {
-							order: ${bin.order || 0}
-							${bin.transition ? `transition: ${bin.transition}` : ''}
-							# links: { set: {} }
-							assets: { connect: [${bin.assets.map(asset => `{ id: "${asset.id}" }`).join(' ')}] }
-							htmlBlocks: {
-								create: [${bin.html_blocks.map((block, block_j) => `{
-									name: $name${bin_i}_${block_j}
-									code: $code${bin_i}_${block_j}
-									html: $html${bin_i}_${block_j}
-									${block.template ? `template: ${block.template}` : ''}
-									${block.color ? `highlightColor: ${block.color}` : ''}
-									order: ${block.order || 0}
-								}`).join(EOL)}]
-							}
-						}
-						update: {
-							order: ${bin.order || 0}
-							${bin.transition ? `transition: ${bin.transition}` : ''}
-							# links: { set: {} }
-							assets: { set: [${bin.assets.map(asset => `{ id: "${asset.id}" }`).join(' ')}] }
-							htmlBlocks: {
-								upsert: [${bin.html_blocks.map((block, block_j) => `{
-									where: { id: "${block.id}" }
-									${['create', 'update'].map(type => `${type}: {
+						data: {
+							create: {
+								order: ${bin.order || 0}
+								${bin.transition ? `transition: ${bin.transition}` : ''}
+								# links: { set: {} }
+								assets: { connect: [${bin.assets.map(asset => `{ id: "${asset.id}" }`).join(' ')}] }
+								htmlBlocks: {
+									create: [${bin.html_blocks.map((block, block_j) => `{
 										name: $name${bin_i}_${block_j}
 										code: $code${bin_i}_${block_j}
 										html: $html${bin_i}_${block_j}
 										${block.template ? `template: ${block.template}` : ''}
 										${block.color ? `highlightColor: ${block.color}` : ''}
 										order: ${block.order || 0}
-									}`).join(EOL)}
-								}`).join(EOL)}]
+									}`).join(EOL)}]
+								}
+							}
+							update: {
+								order: ${bin.order || 0}
+								${bin.transition ? `transition: ${bin.transition}` : ''}
+								# links: { set: {} }
+								assets: { set: [${bin.assets.map(asset => `{ id: "${asset.id}" }`).join(' ')}] }
+								htmlBlocks: {
+									upsert: [${bin.html_blocks.map((block, block_j) => `{
+										where: { id: "${block.id}" }
+										data: {
+											${['create', 'update'].map(type => `${type}: {
+												name: $name${bin_i}_${block_j}
+												code: $code${bin_i}_${block_j}
+												html: $html${bin_i}_${block_j}
+												${block.template ? `template: ${block.template}` : ''}
+												${block.color ? `highlightColor: ${block.color}` : ''}
+												order: ${block.order || 0}
+											}`).join(EOL)}
+										}
+									}`).join(EOL)}]
+								}
 							}
 						}
 					}`).join(EOL)}]
