@@ -5,7 +5,7 @@
 
 const { cms_query } = require('../../../loaders.js')
 
-module.exports = async function({ title, slug, clip_id }) {
+module.exports = async function({ story_slug, sequence_slug, clip_id }) {
 
 	const clip_query = `{
 		id
@@ -52,11 +52,11 @@ module.exports = async function({ title, slug, clip_id }) {
 	}`
 
 	const { story } = await cms_query(`query {
-		story(where: { title: "${title.toLowerCase()}" }) {
+		story(where: { title: "${story_slug}" }) {
 			id
 			title
 			slug
-			sequences(where: { slug: "${slug}" }) {
+			sequences(where: { slug: "${sequence_slug}" }) {
 				id
 				title
 				slug
