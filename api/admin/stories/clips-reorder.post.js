@@ -5,7 +5,7 @@ module.exports = async function({ clip_changes }) {
 
 	const mutation = `mutation {
 		${clip_changes.map(({ id, order }) => `
-			clip_${id}: updateClip(where: { id: "${id}" } data: { order: "${order}" }) { id order }
+			clip_${id}: updateClip(where: { id: "${id}" } data: { order: ${order} }) { id order }
 		`).join(EOL)}
 	}`
 

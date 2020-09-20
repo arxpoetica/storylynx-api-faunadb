@@ -14,7 +14,7 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 		mutation create_clip($slug: String${mutation_var_defs}) {
 			created_clip: createClip(data: {
 				slug: $slug
-				order: "${order}"
+				order: ${order}
 				template: ${clip.template}
 				hideNavigation: ${clip.hide_navigation}
 				themeElements: { set: [${clip.theme_elements.join(', ')}] }

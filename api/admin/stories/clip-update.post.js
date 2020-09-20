@@ -45,7 +45,7 @@ module.exports = async function({ clip }) {
 		) {
 			updated_clip: updateClip(where: { id: "${clip.id}" }, data: {
 				slug: $slug
-				order: "${clip.order}"
+				order: ${clip.order}
 				template: ${clip.template}
 				hideNavigation: ${clip.hide_navigation}
 				themeElements: [${clip.theme_elements.join(', ')}]
