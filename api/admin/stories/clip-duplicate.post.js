@@ -14,11 +14,12 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 		mutation create_clip($slug: String${mutation_var_defs}) {
 			created_clip: createClip(data: {
 				slug: $slug
+				parentName: "${clip.parentName}"
 				order: ${order}
 				template: ${clip.template}
 				hideNavigation: ${clip.hide_navigation}
-				themeElements: { set: [${clip.theme_elements.join(', ')}] }
-				transitions: { set: [${clip.transitions.join(', ')}] }
+				themeElements: [${clip.theme_elements.join(', ')}]
+				transitions: [${clip.transitions.join(', ')}]
 				assetBins: {
 					create: [${clip.asset_bins.map((bin, bin_i) => `{
 						order: ${bin.order || 0}
