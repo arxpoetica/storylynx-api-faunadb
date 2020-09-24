@@ -83,31 +83,14 @@ module.exports = async function({ id }) {
 		enum_templates: __type(name: "Templates") { values: enumValues { name } }
 		enum_theme_elements: __type(name: "ThemeElements") { values: enumValues { name } }
 		enum_template_transitions: __type(name: "TemplateTransitions") { values: enumValues { name } }
+		enum_asset_transitions: __type(name: "AssetTransitions") { values: enumValues { name } }
+		enum_background_positions: __type(name: "BackgroundPositions") { values: enumValues { name } }
 		enum_html_templates: __type(name: "HtmlTemplates") { values: enumValues { name } }
 		enum_html_colors: __type(name: "HtmlHighlightColors") { values: enumValues { name } }
 
 	}`
 
 	const res = await cms_query(query)
-
-	// FIXME: I'd really like to have a way to cache all of this...
-	// TODO: how deep will this go? fine for now
-
-	res.enum_templates = res.enum_templates.values
-		.sort((one, two) => one.name.localeCompare(two.name))
-		.map(value => ({ id: value.name, text: pascal_to_words(value.name) }))
-	res.enum_theme_elements = res.enum_theme_elements.values
-		.sort((one, two) => one.name.localeCompare(two.name))
-		.map(value => ({ id: value.name, text: pascal_to_words(value.name) }))
-	res.enum_template_transitions = res.enum_template_transitions.values
-		.sort((one, two) => one.name.localeCompare(two.name))
-		.map(value => ({ id: value.name, text: pascal_to_words(value.name) }))
-	res.enum_html_templates = res.enum_html_templates.values
-		.sort((one, two) => one.name.localeCompare(two.name))
-		.map(value => ({ id: value.name, text: pascal_to_words(value.name) }))
-	res.enum_html_colors = res.enum_html_colors.values
-		.sort((one, two) => one.name.localeCompare(two.name))
-		.map(value => ({ id: value.name, text: pascal_to_words(value.name) }))
 
 	res.sequence.clips = res.sequence.clips.map(clip => {
 		// clip.template = clip.template || 'Column1'
@@ -130,5 +113,32 @@ module.exports = async function({ id }) {
 		return clip
 	})
 
-	return res
+	return {
+		sequence: res.sequence,
+		sequence_enums: {
+			// FIXME: I'd really like to have a way to cache all of this...
+			// TODO: how deep will this go? fine for now
+			templates: res.enum_templates.values
+				.sort((one, two) => one.name.localeCompare(two.name))
+				.map(value => ({ id: value.name, text: pascal_to_words(value.name) })),
+			theme_elements: res.enum_theme_elements.values
+				.sort((one, two) => one.name.localeCompare(two.name))
+				.map(value => ({ id: value.name, text: pascal_to_words(value.name) })),
+			template_transitions: res.enum_template_transitions.values
+				.sort((one, two) => one.name.localeCompare(two.name))
+				.map(value => ({ id: value.name, text: pascal_to_words(value.name) })),
+			asset_transitions: res.enum_asset_transitions.values
+				.sort((one, two) => one.name.localeCompare(two.name))
+				.map(value => ({ id: value.name, text: pascal_to_words(value.name) })),
+			background_positions: res.enum_background_positions.values
+				.sort((one, two) => one.name.localeCompare(two.name))
+				.map(value => ({ id: value.name, text: pascal_to_words(value.name) })),
+			html_templates: res.enum_html_templates.values
+				.sort((one, two) => one.name.localeCompare(two.name))
+				.map(value => ({ id: value.name, text: pascal_to_words(value.name) })),
+			html_colors: res.enum_html_colors.values
+				.sort((one, two) => one.name.localeCompare(two.name))
+				.map(value => ({ id: value.name, text: pascal_to_words(value.name) })),
+		},
+	}
 }
