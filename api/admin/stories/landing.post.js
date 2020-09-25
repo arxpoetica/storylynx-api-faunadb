@@ -12,9 +12,11 @@ module.exports = async function() {
 				order
 				clips {
 					assetBins {
-						assets(where: { mimeType_contains: "image" }, first: 1) {
-							mimeType
-							handle
+						assets: storyAssets(where: { asset: { mimeType_contains: "image" } }, first: 1) {
+							asset {
+								mimeType
+								handle
+							}
 						}
 					}
 				}
@@ -26,10 +28,10 @@ module.exports = async function() {
 		story.sequences = story.sequences.map(seq => {
 			const clip = seq.clips.find(clip => {
 				return clip.assetBins.find(bin => {
-					return bin.assets.find(asset => asset.mimeType.includes('image'))
+					return bin.assets.find(asset => asset.asset && asset.asset.mimeType.includes('image'))
 				})
 			})
-			seq.asset = clip ? clip.assetBins[0].assets[0] : null
+			seq.asset = clip ? clip.assetBins[0].assets[0].asset : null
 			delete seq.clips
 			return seq
 		})

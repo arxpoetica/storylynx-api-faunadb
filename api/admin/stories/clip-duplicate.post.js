@@ -1,13 +1,20 @@
 const { EOL } = require('os')
+const { merge_asset } = require('../../../utils.js')
 const { cms_mutate } = require('../../../loaders.js')
 
 module.exports = async function({ clip, slug, order, parent_id }) {
 
 	let mutation_var_defs = clip.asset_bins.map((bin, bin_i) => {
-		return bin.html_blocks.map((_, block_j) => {
-			return `$name${bin_i}_${block_j}: String, $code${bin_i}_${block_j}: String, $html${bin_i}_${block_j}: String` // eslint-disable-line max-len
-		}).join(', ')
-	}).filter(bin => bin).join(', ')
+		return bin.assets.map((_, asset_j) => {
+			return `
+				$name${bin_i}_${asset_j}: String
+				$source${bin_i}_${asset_j}: String
+				$caption${bin_i}_${asset_j}: String
+				$code${bin_i}_${asset_j}: String
+				$html${bin_i}_${asset_j}: String
+			`
+		}).join(EOL)
+	}).filter(bin => bin).join(EOL)
 	mutation_var_defs = mutation_var_defs.length ? `, ${mutation_var_defs}` : ''
 
 	const mutation = `
@@ -25,15 +32,23 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 						order: ${bin.order || 0}
 						${bin.transition ? `transition: ${bin.transition}` : ''}
 						# links: { set: {} }
-						assets: { connect: [${bin.assets.map(asset => `{ id: "${asset.id}" }`).join(' ')}] }
-						htmlBlocks: {
-							create: [${bin.html_blocks.map((block, block_j) => `{
-								name: $name${bin_i}_${block_j}
-								code: $code${bin_i}_${block_j}
-								html: $html${bin_i}_${block_j}
-								${block.template ? `template: ${block.template}` : ''}
-								${block.color ? `highlightColor: ${block.color}` : ''}
-								order: ${block.order || 0}
+						storyAssets: {
+							create: [${bin.assets.map((asset, asset_j) => `{
+								order: ${asset.order || 0}
+								${asset.asset_id ? `asset: { connect: { id: "${asset.asset_id}" } }` : ''}
+								name: $name${bin_i}_${asset_j}
+								source: $source${bin_i}_${asset_j}
+								caption: $caption${bin_i}_${asset_j}
+								${typeof asset.width === 'number' ? `widthOverride: ${asset.width}` : ''}
+								${typeof asset.height === 'number' ? `heightOverride: ${asset.height}` : ''}
+								${typeof asset.volume === 'number' ? `volume: ${asset.volume}` : ''}
+								${asset.bg_pos ? `backgroundPosition: ${asset.bg_pos}` : ''}
+								${typeof asset.contain === 'boolean' ? `contain: ${asset.contain}` : ''}
+								${typeof asset.play_once === 'boolean' ? `playOnce: ${asset.play_once}` : ''}
+								html: $html${bin_i}_${asset_j}
+								htmlCode: $code${bin_i}_${asset_j}
+								${asset.template ? `htmlTemplate: ${asset.template}` : ''}
+								${asset.color ? `htmlHighlightColor: ${asset.color}` : ''}
 							}`).join(`${EOL}							`)}]
 						}
 					}`).join(`${EOL}					`)}]
@@ -71,28 +86,31 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 				asset_bins: assetBins(orderBy: order_ASC) {
 					id
 					order
-					assets {
+					assets: storyAssets(orderBy: order_ASC) {
 						id
-						handle
+						asset {
+							id
+							handle
+							url
+							filename: fileName
+							mime_type: mimeType
+						}
+						order
+						name
 						source
 						caption
 						width: widthOverride
 						height: heightOverride
 						contain
-						filename: fileName
-						mime_type: mimeType
 						bg_pos: backgroundPosition
 						volume
-					}
-					# links // NOTE: will use in the near future for vimeo, etc.
-					html_blocks: htmlBlocks {
-						id
-						name
-						template
-						color: highlightColor
-						code
+						play_once: playOnce
+						template: htmlTemplate
+						color: htmlHighlightColor
+						code: htmlCode
 						html
 					}
+					# links // NOTE: will use in the near future for vimeo, etc.
 					transition
 				}
 			}
@@ -101,14 +119,32 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 
 	const variables = { slug: slug || 'New clip' }
 	clip.asset_bins.forEach((bin, bin_i) => {
-		bin.html_blocks.forEach((block, block_j) => {
-			variables[`name${bin_i}_${block_j}`] = block.name || ''
-			variables[`code${bin_i}_${block_j}`] = JSON.stringify(block.code || {})
-			variables[`html${bin_i}_${block_j}`] = block.html || ''
+		bin.assets.forEach((asset, asset_j) => {
+			variables[`name${bin_i}_${asset_j}`] = asset.name || ''
+			variables[`source${bin_i}_${asset_j}`] = asset.source || ''
+			variables[`caption${bin_i}_${asset_j}`] = asset.caption || ''
+			variables[`code${bin_i}_${asset_j}`] = JSON.stringify(asset.code || {})
+			variables[`html${bin_i}_${asset_j}`] = asset.html || ''
 		})
 	})
 
 	const res = await cms_mutate(mutation, variables)
+
+	res.created_clip.asset_bins = res.created_clip.asset_bins.map(bin => {
+		bin.assets = bin.assets.map(merge_asset)
+		return bin
+	})
+	res.created_clip.styles = res.created_clip.styles || {
+		top: null,
+		bottom: null,
+		left: null,
+		right: null,
+		gap: null,
+		width: null,
+		height: null,
+		percent: null,
+	}
+
 	return res
 
 }

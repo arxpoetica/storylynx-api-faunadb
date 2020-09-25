@@ -4,11 +4,13 @@ const { cms_mutate } = require('../../../loaders.js')
 module.exports = async function({ clip }) {
 
 	let mutation_var_defs = clip.asset_bins.map((bin, bin_i) => {
-		return bin.html_blocks.map((_, block_j) => {
+		return bin.assets.map((_, asset_j) => {
 			return `
-				$name${bin_i}_${block_j}: String
-				$code${bin_i}_${block_j}: String
-				$html${bin_i}_${block_j}: String
+				$name${bin_i}_${asset_j}: String
+				$source${bin_i}_${asset_j}: String
+				$caption${bin_i}_${asset_j}: String
+				$code${bin_i}_${asset_j}: String
+				$html${bin_i}_${asset_j}: String
 			`
 		})
 	}).filter(Boolean).join(EOL)
@@ -38,6 +40,27 @@ module.exports = async function({ clip }) {
 		// return output
 	}
 
+	function generate_story_asset(asset, bin_index, asset_index) {
+		return `{
+			order: ${asset.order || 0}
+			${asset.asset_id ? `asset: { connect: { id: "${asset.asset_id}" } }` : ''}
+			name: $name${bin_index}_${asset_index}
+			source: $source${bin_index}_${asset_index}
+			caption: $caption${bin_index}_${asset_index}
+			${typeof asset.width === 'number' ? `widthOverride: ${asset.width}` : ''}
+			${typeof asset.height === 'number' ? `heightOverride: ${asset.height}` : ''}
+			${typeof asset.volume === 'number' ? `volume: ${asset.volume}` : ''}
+			${asset.bg_pos ? `backgroundPosition: ${asset.bg_pos}` : ''}
+			${typeof asset.contain === 'boolean' ? `contain: ${asset.contain}` : ''}
+			${typeof asset.play_once === 'boolean' ? `playOnce: ${asset.play_once}` : ''}
+			html: $html${bin_index}_${asset_index}
+			htmlCode: $code${bin_index}_${asset_index}
+			${asset.template ? `htmlTemplate: ${asset.template}` : ''}
+			${asset.color ? `htmlHighlightColor: ${asset.color}` : ''}
+		}`
+	}
+
+	/* eslint-disable max-len */
 	const mutation = `
 		mutation update_clip(
 			$slug: String
@@ -67,35 +90,19 @@ module.exports = async function({ clip }) {
 								order: ${bin.order || 0}
 								${bin.transition ? `transition: ${bin.transition}` : ''}
 								# links: { set: {} }
-								assets: { connect: [${bin.assets.map(asset => `{ id: "${asset.id}" }`).join(' ')}] }
-								htmlBlocks: {
-									create: [${bin.html_blocks.map((block, block_j) => `{
-										name: $name${bin_i}_${block_j}
-										code: $code${bin_i}_${block_j}
-										html: $html${bin_i}_${block_j}
-										${block.template ? `template: ${block.template}` : ''}
-										${block.color ? `highlightColor: ${block.color}` : ''}
-										order: ${block.order || 0}
-									}`).join(EOL)}]
+								storyAssets: {
+									create: [${bin.assets.map((asset, asset_j) => generate_story_asset(asset, bin_i, asset_j)).join(EOL)}]
 								}
 							}
 							update: {
 								order: ${bin.order || 0}
 								${bin.transition ? `transition: ${bin.transition}` : ''}
 								# links: { set: {} }
-								assets: { set: [${bin.assets.map(asset => `{ id: "${asset.id}" }`).join(' ')}] }
-								htmlBlocks: {
-									upsert: [${bin.html_blocks.map((block, block_j) => `{
-										where: { id: "${block.id}" }
+								storyAssets: {
+									upsert: [${bin.assets.map((asset, asset_j) => `{
+										where: { id: "${asset.id}" }
 										data: {
-											${['create', 'update'].map(type => `${type}: {
-												name: $name${bin_i}_${block_j}
-												code: $code${bin_i}_${block_j}
-												html: $html${bin_i}_${block_j}
-												${block.template ? `template: ${block.template}` : ''}
-												${block.color ? `highlightColor: ${block.color}` : ''}
-												order: ${block.order || 0}
-											}`).join(EOL)}
+											${['create', 'update'].map(type => `${type}: ${generate_story_asset(asset, bin_i, asset_j)}`).join(EOL)}
 										}
 									}`).join(EOL)}]
 								}
@@ -114,10 +121,12 @@ module.exports = async function({ clip }) {
 
 	const variables = { slug: clip.slug || '' }
 	clip.asset_bins.forEach((bin, bin_i) => {
-		bin.html_blocks.forEach((block, block_j) => {
-			variables[`name${bin_i}_${block_j}`] = block.name || ''
-			variables[`code${bin_i}_${block_j}`] = JSON.stringify(block.code || {})
-			variables[`html${bin_i}_${block_j}`] = block.html || ''
+		bin.assets.forEach((asset, asset_j) => {
+			variables[`name${bin_i}_${asset_j}`] = asset.name || ''
+			variables[`source${bin_i}_${asset_j}`] = asset.source || ''
+			variables[`caption${bin_i}_${asset_j}`] = asset.caption || ''
+			variables[`code${bin_i}_${asset_j}`] = JSON.stringify(asset.code || {})
+			variables[`html${bin_i}_${asset_j}`] = asset.html || ''
 		})
 	})
 

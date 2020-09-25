@@ -1,4 +1,4 @@
-const { pascal_to_words } = require('../../../utils.js')
+const { pascal_to_words, merge_asset } = require('../../../utils.js')
 const { cms_query } = require('../../../loaders.js')
 
 module.exports = async function({ id }) {
@@ -30,30 +30,31 @@ module.exports = async function({ id }) {
 				asset_bins: assetBins(orderBy: order_ASC) {
 					id
 					order
-					assets {
+					assets: storyAssets(orderBy: order_ASC) {
 						id
-						handle
-						url
+						asset {
+							id
+							handle
+							url
+							filename: fileName
+							mime_type: mimeType
+						}
+						order
+						name
 						source
 						caption
 						width: widthOverride
 						height: heightOverride
 						contain
-						filename: fileName
-						mime_type: mimeType
 						bg_pos: backgroundPosition
 						volume
 						play_once: playOnce
-					}
-					# links // NOTE: will use in the near future for vimeo, etc.
-					html_blocks: htmlBlocks {
-						id
-						name
-						template
-						color: highlightColor
-						code
+						template: htmlTemplate
+						color: htmlHighlightColor
+						code: htmlCode
 						html
 					}
+					# links // NOTE: will use in the near future for vimeo, etc.
 					transition
 				}
 				# audio_clips: parentAudioClips(where: { parentSequence: { id_not: null } }) {
@@ -95,9 +96,7 @@ module.exports = async function({ id }) {
 	res.sequence.clips = res.sequence.clips.map(clip => {
 		// clip.template = clip.template || 'Column1'
 		clip.asset_bins = clip.asset_bins.map(bin => {
-			for (let block of bin.html_blocks) {
-				block.code = block.code ? JSON.parse(block.code) : {}
-			}
+			bin.assets = bin.assets.map(merge_asset)
 			return bin
 		})
 		clip.styles = clip.styles || {

@@ -1,20 +1,19 @@
 const { cms_mutate } = require('../../../loaders.js')
 
-module.exports = async function({ clip_id, style_id, asset_bin_ids, html_block_ids }) {
+/* eslint-disable max-len */
+module.exports = async function({ clip_id, style_id, asset_bin_ids, asset_ids }) {
 
 	const delete_style = style_id ? `deleted_style: deleteClipStyle(where: { id: "${style_id}" }) { id }` : ''
 
 	let asset_bins_delete = ''
 	if (asset_bin_ids.length) {
 		const joined_asset_bin_ids = asset_bin_ids.map(id => `"${id}"`).join(', ')
-		asset_bins_delete =
-			`deleted_assets_bins_count: deleteManyAssetsBins(where: { id_in: [${joined_asset_bin_ids}] }) { count }`
+		asset_bins_delete = `deleted_assets_bins: deleteManyAssetsBinsConnection(where: { id_in: [${joined_asset_bin_ids}] }) { aggregate { count } }`
 	}
-	let html_blocks_delete
-	if (html_block_ids.length) {
-		const joined_html_block_ids = html_block_ids.map(id => `"${id}"`).join(', ')
-		html_blocks_delete =
-			`deleted_html_blocks_count: deleteManyHtmlBlocks(where: { id_in: [${joined_html_block_ids}] }) { count }`
+	let assets_delete
+	if (asset_ids.length) {
+		const joined_asset_ids = asset_ids.map(id => `"${id}"`).join(', ')
+		assets_delete = `deleted_assets: deleteManyStoryAssetsConnection(where: { id_in: [${joined_asset_ids}] }) { aggregate { count } }`
 	}
 
 	const mutation = `
@@ -22,7 +21,7 @@ module.exports = async function({ clip_id, style_id, asset_bin_ids, html_block_i
 			deleted_clip: deleteClip(where: { id: "${clip_id}" }) { id }
 			${delete_style}
 			${asset_bins_delete}
-			${html_blocks_delete}
+			${assets_delete}
 		}
 	`
 

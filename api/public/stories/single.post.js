@@ -1,4 +1,5 @@
 const { cms_query } = require('../../../loaders.js')
+const { merge_asset } = require('../../../utils.js')
 
 module.exports = async function({ story_slug, sequence_slug }) {
 
@@ -29,23 +30,28 @@ module.exports = async function({ story_slug, sequence_slug }) {
 					}
 					asset_bins: assetBins(orderBy: order_ASC) {
 						order
-						assets(orderBy: order_ASC) {
+						assets: storyAssets(orderBy: order_ASC) {
 							id
-							handle
-							url
+							asset {
+								id
+								handle
+								url
+								mime_type: mimeType
+							}
 							source
 							caption
 							width: widthOverride
 							height: heightOverride
 							contain
-							mime_type: mimeType
 							bg_pos: backgroundPosition
 							volume
 							play_once: playOnce
+							template: htmlTemplate
+							color: htmlHighlightColor
+							html
 						}
 						# links // NOTE: will use in the near future for vimeo, etc.
 						transition
-						html_blocks: htmlBlocks(orderBy: order_ASC) { template color: highlightColor html }
 					}
 					audio_clips: parentAudioClips(where: { parentSequence: { id_not: null } }) {
 						id
@@ -83,22 +89,10 @@ module.exports = async function({ story_slug, sequence_slug }) {
 	// TODO: how deep will this go? fine for now
 	story.sequence = story.sequences[0]
 	delete story.sequences
-
 	story.sequence.clips = story.sequence.clips.map(clip => {
 		clip.template = clip.template || 'Column1'
 		clip.asset_bins = clip.asset_bins.map(bin => {
-			bin.assets = bin.assets.map(asset => {
-				// clamping volume putting in range between 0 and 1
-				if (asset.volume) {
-					asset.volume = Math.max(Math.min(asset.volume / 10, 1), 0)
-				}
-				return asset
-			})
-			for (let block of bin.html_blocks) {
-				block.mime_type = 'text/html'
-				bin.assets.push(block)
-			}
-			delete bin.html_blocks
+			bin.assets = bin.assets.map(merge_asset)
 			return bin
 		})
 		return clip
