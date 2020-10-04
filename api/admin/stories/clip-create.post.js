@@ -4,7 +4,17 @@ const { cms_mutate } = require('../../../loaders.js')
 
 module.exports = async function({ clip, slug, order, parent_id }) {
 
-	let mutation_var_defs = clip.asset_bins.map((bin, bin_i) => {
+	const {
+		parent_name,
+		template,
+		hide_navigation = false,
+		theme_elements = [],
+		transitions = [],
+		asset_bins = [],
+		styles,
+	} = clip
+
+	let mutation_var_defs = asset_bins.map((bin, bin_i) => {
 		return bin.assets.map((_, asset_j) => {
 			return `
 				$name${bin_i}_${asset_j}: String
@@ -21,14 +31,14 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 		mutation create_clip($slug: String${mutation_var_defs}) {
 			created_clip: createClip(data: {
 				slug: $slug
-				parentName: "${clip.parentName}"
+				parentName: "${parent_name}"
 				order: ${order}
-				template: ${clip.template}
-				hideNavigation: ${clip.hide_navigation}
-				themeElements: [${clip.theme_elements.join(', ')}]
-				transitions: [${clip.transitions.join(', ')}]
+				template: ${template}
+				hideNavigation: ${hide_navigation}
+				themeElements: [${theme_elements.join(', ')}]
+				transitions: [${transitions.join(', ')}]
 				assetBins: {
-					create: [${clip.asset_bins.map((bin, bin_i) => `{
+					create: [${asset_bins.map((bin, bin_i) => `{
 						order: ${bin.order || 0}
 						${bin.transition ? `transition: ${bin.transition}` : ''}
 						# links: { set: {} }
@@ -55,16 +65,16 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 				}
 				parentSequence: { connect: { id: "${parent_id}" } }
 				# parentAudioClips:
-				${clip.styles ? `styles: {
+				${styles ? `styles: {
 					create: {
-						${typeof clip.styles.top === 'number' ? `top: ${clip.styles.top}` : ''}
-						${typeof clip.styles.right === 'number' ? `right: ${clip.styles.right}` : ''}
-						${typeof clip.styles.bottom === 'number' ? `bottom: ${clip.styles.bottom}` : ''}
-						${typeof clip.styles.left === 'number' ? `left: ${clip.styles.left}` : ''}
-						${typeof clip.styles.width === 'number' ? `templateWidth: ${clip.styles.width}` : ''}
-						${typeof clip.styles.height === 'number' ? `templateHeight: ${clip.styles.height}` : ''}
-						${typeof clip.styles.percent === 'boolean' ? `widthAsPercent: ${clip.styles.percent}` : ''}
-						${typeof clip.styles.gap === 'number' ? `gap: ${clip.styles.gap}` : ''}
+						${typeof styles.top === 'number' ? `top: ${styles.top}` : ''}
+						${typeof styles.right === 'number' ? `right: ${styles.right}` : ''}
+						${typeof styles.bottom === 'number' ? `bottom: ${styles.bottom}` : ''}
+						${typeof styles.left === 'number' ? `left: ${styles.left}` : ''}
+						${typeof styles.width === 'number' ? `templateWidth: ${styles.width}` : ''}
+						${typeof styles.height === 'number' ? `templateHeight: ${styles.height}` : ''}
+						${typeof styles.percent === 'boolean' ? `widthAsPercent: ${styles.percent}` : ''}
+						${typeof styles.gap === 'number' ? `gap: ${styles.gap}` : ''}
 					}
 				}` : ''}
 			}) {
@@ -118,7 +128,7 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 	`
 
 	const variables = { slug: slug || 'New clip' }
-	clip.asset_bins.forEach((bin, bin_i) => {
+	asset_bins.forEach((bin, bin_i) => {
 		bin.assets.forEach((asset, asset_j) => {
 			variables[`name${bin_i}_${asset_j}`] = asset.name || ''
 			variables[`source${bin_i}_${asset_j}`] = asset.source || ''
