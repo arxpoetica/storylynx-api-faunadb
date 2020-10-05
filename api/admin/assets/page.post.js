@@ -1,4 +1,5 @@
-const { cms_query, create_where } = require('../../../loaders.js')
+const { cms_query } = require('../../../loaders.js')
+const { create_where } = require('../../../utils.js')
 
 module.exports = async function({ page, page_size, tags, status, column, sort }) {
 	const resources_where = create_where({ status, tags })
