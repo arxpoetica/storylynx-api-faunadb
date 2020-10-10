@@ -15,7 +15,7 @@ module.exports = async function({ ids, search, page, page_size, column, sort }) 
 			skip: ${(page - 1) * page_size}
 			where: {
 				AND: [
-					{ id_not_in: [${ids}] }
+					${ids ? `{ id_not_in: [${ids}] }` : ''}
 					{ fileName_contains: $search }
 				]
 			}
@@ -35,7 +35,6 @@ module.exports = async function({ ids, search, page, page_size, column, sort }) 
 
 	const variables = { search }
 	const res = await cms_mutate(query, variables)
-
 
 	res.assets = res.assets.map(asset => {
 		asset.created = new Date(asset.created).getTime()
