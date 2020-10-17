@@ -7,8 +7,6 @@ module.exports = async function({ bin_changes }) {
 			bin_${id}: updateAssetsBin(where: { id: "${id}" } data: { order: ${order} }) { id order }
 		`).join(EOL)}
 	}`
-	console.log(mutation)
 
 	return await cms_mutate(mutation)
-
 }
