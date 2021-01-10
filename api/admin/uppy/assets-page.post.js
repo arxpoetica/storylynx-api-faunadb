@@ -1,4 +1,4 @@
-const { cms_mutate } = require('../../../loaders.js')
+const { cms_query } = require('../../../loaders.js')
 
 module.exports = async function({ ids, search, page, page_size, column, sort }) {
 
@@ -34,7 +34,7 @@ module.exports = async function({ ids, search, page, page_size, column, sort }) 
 	}`
 
 	const variables = { search }
-	const res = await cms_mutate(query, variables)
+	const res = await cms_query(query, variables)
 
 	res.assets = res.assets.map(asset => {
 		asset.created = new Date(asset.created).getTime()

@@ -27,9 +27,9 @@ module.exports = async function({ page, page_size, tags, status, column, sort })
 			tags { name: tag }
 		}
 
-		drafts: postsConnection(${draft_where}) { aggregate {count} }
-		published: postsConnection(${published_where}) { aggregate {count} }
-		archived: postsConnection(${archived_where}) { aggregate {count} }
+		drafts: postsConnection(${draft_where}) { aggregate { count } }
+		published: postsConnection(${published_where}) { aggregate { count } }
+		archived: postsConnection(${archived_where}) { aggregate { count } }
 	}`
 	// console.log(query)
 	const { posts, drafts, published, archived } = await cms_query(query)
