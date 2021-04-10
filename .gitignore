@@ -1,3 +1,4 @@
 /node_modules
+/.backup-cache.json
 /dashboard
 /dev/migrations
