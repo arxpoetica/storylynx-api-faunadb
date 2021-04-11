@@ -101,7 +101,28 @@ module.exports = async function() {
 		}
 	}
 
-	const final = { entries, counts }
+	// finally, lets get all the enum values
+	const enum_names = [
+		'AssetTransitions',
+		'BackgroundPositions',
+		'Categories',
+		'ContentTypes',
+		'HtmlHighlightColors',
+		'HtmlTemplates',
+		'Subjects',
+		'TemplateTransitions',
+		'Templates',
+		'ThemeElements',
+	]
+	const enums_query = enum_names.map(name => `${name}: __type(name: "${name}") { enumValues { name } }`)
+	const enums_res = await cms_query(`{ ${enums_query.join(EOL)} }`)
+	const enums = {}
+	for (const [key, { enumValues }] of Object.entries(enums_res)) {
+		enums[key] = enumValues.map(value => value.name)
+	}
+
+	// send the response
+	const final = { entries, counts, enums }
 
 	// // DEV ONLY CACHE...UNCOMMENT...
 	// dev_only_save_to_cache(final)
