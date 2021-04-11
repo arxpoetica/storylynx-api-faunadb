@@ -9,55 +9,99 @@ module.exports = async function() {
 	// if (cache) { return cache }
 	// // DEV ONLY CACHE...UNCOMMENT...
 
-	const common_1 = '(first: 1000) { id createdAt updatedAt'
-
 	/* eslint-disable max-len */
-	// TODO: this will ultimately require pagination for huge datasets...
-	// SEE: https://graphcms.com/docs/content-api/pagination
-	const queries = [
-		`assets${common_1} handle fileName width height size mimeType assetGroupOrder assetPart caption volume newsAsset archivalAsset avatarAccount { id } coverLinkedAsset { id } relatedPosts { id } audioAssetAudioClip { id } relatedAssetGroups { id } relatedAssetCover { id } assetCover { id } parentAssetBins { id } parentStoryAsset { id } }`,
-		`accounts${common_1} publishedAt username hash salt role first last avatar { id } }`,
-		`assetCovers${common_1} publishedAt asset { id } relatedAsset { id } }`,
-		`assetGroups${common_1} publishedAt title caption source detail assets { id } assetLinks { id } contentType categories subject year tags { id } externalAssets }`,
-		`assetsBins${common_1} parentClip { id } order storyAssets { id } links transition assets { id } }`,
-		`audioClips${common_1} name audioAsset { id } clipsInRange { id } parentSequence { id } }`,
-		`clips${common_1} slug hideNavigation parentName order template themeElements transitions assetBins { id } styles { id } parentAudioClips { id } parentSequence { id } }`,
-		`clipStyles${common_1} parentClip { id } top right bottom left gap templateWidth templateHeight widthAsPercent }`,
-		`linkedAssets${common_1} link cover { id } source summary relatedAssetGroups { id } }`,
-		`pages${common_1} title slug content { html } footerNavigation }`,
-		`posts${common_1} headline subheadline slug publishedDatetime byline linkback detail { html } assets { id } tags { id } }`,
-		`sequences${common_1} parentStory { id } title slug hideNavigation order clips { id } audioClips { id } }`,
-		`stories${common_1} title slug sequences { id } }`,
-		`storyAssets${common_1} asset { id } name order caption source volume playOnce widthOverride heightOverride contain backgroundPosition htmlTemplate htmlHighlightColor htmlCode html parentAssetBin { id } }`,
-		`tags${common_1} tag posts { id } assetGroups { id } }`,
-	]
+	const models = [{
+		name: 'assets',
+		fields: 'handle fileName width height size mimeType assetGroupOrder assetPart caption volume newsAsset archivalAsset avatarAccount { id } coverLinkedAsset { id } relatedPosts { id } audioAssetAudioClip { id } relatedAssetGroups { id } relatedAssetCover { id } assetCover { id } parentAssetBins { id } parentStoryAsset { id }',
+	}, {
+		name: 'accounts',
+		fields: 'publishedAt username hash salt role first last avatar { id }',
+	}, {
+		name: 'assetCovers',
+		fields: 'publishedAt asset { id } relatedAsset { id }',
+	}, {
+		name: 'assetGroups',
+		fields: 'publishedAt title caption source detail assets { id } assetLinks { id } contentType categories subject year tags { id } externalAssets',
+	}, {
+		name: 'assetsBins',
+		fields: 'parentClip { id } order storyAssets { id } links transition assets { id }',
+	}, {
+		name: 'audioClips',
+		fields: 'name audioAsset { id } clipsInRange { id } parentSequence { id }',
+	}, {
+		name: 'clips',
+		fields: 'slug hideNavigation parentName order template themeElements transitions assetBins { id } styles { id } parentAudioClips { id } parentSequence { id }',
+	}, {
+		name: 'clipStyles',
+		fields: 'parentClip { id } top right bottom left gap templateWidth templateHeight widthAsPercent',
+	}, {
+		name: 'linkedAssets',
+		fields: 'link cover { id } source summary relatedAssetGroups { id }',
+	}, {
+		name: 'pages',
+		fields: 'title slug content { html } footerNavigation',
+	}, {
+		name: 'posts',
+		fields: 'headline subheadline slug publishedDatetime byline linkback detail { html } assets { id } tags { id }',
+	}, {
+		name: 'sequences',
+		fields: 'parentStory { id } title slug hideNavigation order clips { id } audioClips { id }',
+	}, {
+		name: 'stories',
+		fields: 'title slug sequences { id }',
+	}, {
+		name: 'storyAssets',
+		fields: 'asset { id } name order caption source volume playOnce widthOverride heightOverride contain backgroundPosition htmlTemplate htmlHighlightColor htmlCode html parentAssetBin { id }',
+	}, {
+		name: 'tags',
+		fields: 'tag posts { id } assetGroups { id }',
+	}]
 	/* eslint-enable max-len */
-	const queries_res = await cms_query(`{ ${queries.join(EOL)} }`)
 
-	const count_queries = [
-		'assets: assetsConnection { aggregate { count } }',
-		'accounts: accountsConnection { aggregate { count } }',
-		'assetCovers: assetCoversConnection { aggregate { count } }',
-		'assetGroups: assetGroupsConnection { aggregate { count } }',
-		'assetsBins: assetsBinsConnection { aggregate { count } }',
-		'audioClips: audioClipsConnection { aggregate { count } }',
-		'clips: clipsConnection { aggregate { count } }',
-		'clipStyles: clipStylesConnection { aggregate { count } }',
-		'linkedAssets: linkedAssetsConnection { aggregate { count } }',
-		'pages: pagesConnection { aggregate { count } }',
-		'posts: postsConnection { aggregate { count } }',
-		'sequences: sequencesConnection { aggregate { count } }',
-		'stories: storiesConnection { aggregate { count } }',
-		'storyAssets: storyAssetsConnection { aggregate { count } }',
-		'tags: tagsConnection { aggregate { count } }',
-	]
+	// get count queries
+	const count_queries = models.map(model => `${model.name}: ${model.name}Connection { aggregate { count } }`)
 	const count_queries_res = await cms_query(`{ ${count_queries.join(EOL)} }`)
 
+	// 1. simplify counts object for the response
+	// 2. sort models into normal (`main`) and ones that need pagination
 	const counts = {}
+	const main_models = []
+	const page_models = []
 	for (const [key, obj] of Object.entries(count_queries_res)) {
+		const { count } = obj.aggregate
 		counts[key] = obj.aggregate.count
+
+		const model = models.find(model => model.name === key)
+		if (count < 999) {
+			main_models.push(model)
+		} else {
+			page_models.push(model)
+		}
 	}
-	const final = { entries: queries_res, counts }
+
+	// load main/normal model data
+	const main_queries = main_models.map(model => {
+		return `${model.name}(first: 1000) { id createdAt updatedAt ${model.fields} }`
+	})
+	const entries = await cms_query(`{ ${main_queries.join(EOL)} }`)
+
+	// load paginated model data for models that have 1,000+ entries
+	// SEE: https://graphcms.com/docs/content-api/pagination
+	for (const model of page_models) {
+		const page_count = Math.ceil(counts[model.name] / 1000)
+		const pages = new Array(page_count).fill('')
+		entries[model.name] = entries[model.name] || []
+		for (const [index] of pages.entries()) {
+			const query = [
+				`{ ${model.name}(first: 1000, skip: ${index * 1000})`,
+				`{ id createdAt updatedAt ${model.fields} } }`,
+			].join(' ')
+			const more = await cms_query(query)
+			entries[model.name] = [...entries[model.name], ...more[model.name]]
+		}
+	}
+
+	const final = { entries, counts }
 
 	// // DEV ONLY CACHE...UNCOMMENT...
 	// dev_only_save_to_cache(final)
@@ -72,14 +116,19 @@ module.exports = async function() {
 // 	const { join } = require('path')
 // 	const filename = join(process.cwd(), 'node_modules/storylynx-api-faunadb/.backup-cache.json')
 // 	if (existsSync(filename)) {
-// 		return JSON.parse(readFileSync(filename, 'utf8'))
+// 		console.log('...loading from cache...')
+// 		const cache = JSON.parse(readFileSync(filename, 'utf8'))
+// 		// console.log(cache)
+// 		return cache
 // 	}
 // 	return false
 // }
 
 // function dev_only_save_to_cache(data) {
+// 	console.log('...saving to cache...')
+// 	// console.log(data)
 // 	const { writeFileSync } = require('fs')
 // 	const { join } = require('path')
 // 	const filename = join(process.cwd(), 'node_modules/storylynx-api-faunadb/.backup-cache.json')
-// 	writeFileSync(filename, JSON.stringify(data, null, '\t'), 'utf8')
+// 	writeFileSync(filename, JSON.stringify(data, null, '\t') + EOL, 'utf8')
 // }
