@@ -1,5 +1,6 @@
 const { EOL } = require('os')
 const { cms_query } = require('../../../loaders.js')
+const { models } = require('../../../models.js')
 
 // TODO: think this through much more comprehensively
 module.exports = async function() {
@@ -9,65 +10,24 @@ module.exports = async function() {
 	// if (cache) { return cache }
 	// // DEV ONLY CACHE...UNCOMMENT...
 
-	/* eslint-disable max-len */
-	const models = [{
-		name: 'assets',
-		fields: 'handle fileName width height size mimeType assetGroupOrder assetPart caption volume newsAsset archivalAsset avatarAccount { id } coverLinkedAsset { id } relatedPosts { id } audioAssetAudioClip { id } relatedAssetGroups { id } relatedAssetCover { id } assetCover { id } parentAssetBins { id } parentStoryAsset { id }',
-	}, {
-		name: 'accounts',
-		fields: 'publishedAt username hash salt role first last avatar { id }',
-	}, {
-		name: 'assetCovers',
-		fields: 'publishedAt asset { id } relatedAsset { id }',
-	}, {
-		name: 'assetGroups',
-		fields: 'publishedAt title caption source detail assets { id } assetLinks { id } contentType categories subject year tags { id } externalAssets',
-	}, {
-		name: 'assetsBins',
-		fields: 'parentClip { id } order storyAssets { id } links transition assets { id }',
-	}, {
-		name: 'audioClips',
-		fields: 'name audioAsset { id } clipsInRange { id } parentSequence { id }',
-	}, {
-		name: 'clips',
-		fields: 'slug hideNavigation parentName order template themeElements transitions assetBins { id } styles { id } parentAudioClips { id } parentSequence { id }',
-	}, {
-		name: 'clipStyles',
-		fields: 'parentClip { id } top right bottom left gap templateWidth templateHeight widthAsPercent',
-	}, {
-		name: 'linkedAssets',
-		fields: 'link cover { id } source summary relatedAssetGroups { id }',
-	}, {
-		name: 'pages',
-		fields: 'title slug content { html } footerNavigation',
-	}, {
-		name: 'posts',
-		fields: 'headline subheadline slug publishedDatetime byline linkback detail { html } assets { id } tags { id }',
-	}, {
-		name: 'sequences',
-		fields: 'parentStory { id } title slug hideNavigation order clips { id } audioClips { id }',
-	}, {
-		name: 'stories',
-		fields: 'title slug sequences { id }',
-	}, {
-		name: 'storyAssets',
-		fields: 'asset { id } name order caption source volume playOnce widthOverride heightOverride contain backgroundPosition htmlTemplate htmlHighlightColor htmlCode html parentAssetBin { id }',
-	}, {
-		name: 'tags',
-		fields: 'tag posts { id } assetGroups { id }',
-	}]
-	/* eslint-enable max-len */
+	// backup the schema, in case we ever lose it
+	const schema_query = models.map(model => {
+		return `${model.schema}: __type(name: "${model.schema}") { name fields { name type { name kind } } }`
+	}).join(EOL)
+	const schema = await cms_query(`{ ${schema_query} }`)
 
-	// get count queries
-	const count_queries = models.map(model => `${model.name}: ${model.name}Connection { aggregate { count } }`)
-	const count_queries_res = await cms_query(`{ ${count_queries.join(EOL)} }`)
+	// get counts query
+	const counts_query = models.map(model => {
+		return `${model.name}: ${model.name}Connection { aggregate { count } }`
+	}).join(EOL)
+	const counts_query_res = await cms_query(`{ ${counts_query} }`)
 
 	// 1. simplify counts object for the response
 	// 2. sort models into normal (`main`) and ones that need pagination
 	const counts = {}
 	const main_models = []
 	const page_models = []
-	for (const [key, obj] of Object.entries(count_queries_res)) {
+	for (const [key, obj] of Object.entries(counts_query_res)) {
 		const { count } = obj.aggregate
 		counts[key] = obj.aggregate.count
 
@@ -80,10 +40,10 @@ module.exports = async function() {
 	}
 
 	// load main/normal model data
-	const main_queries = main_models.map(model => {
+	const main_query = main_models.map(model => {
 		return `${model.name}(first: 1000) { id createdAt updatedAt ${model.fields} }`
-	})
-	const entries = await cms_query(`{ ${main_queries.join(EOL)} }`)
+	}).join(EOL)
+	const entries = await cms_query(`{ ${main_query} }`)
 
 	// load paginated model data for models that have 1,000+ entries
 	// SEE: https://graphcms.com/docs/content-api/pagination
@@ -114,15 +74,17 @@ module.exports = async function() {
 		'Templates',
 		'ThemeElements',
 	]
-	const enums_query = enum_names.map(name => `${name}: __type(name: "${name}") { enumValues { name } }`)
-	const enums_res = await cms_query(`{ ${enums_query.join(EOL)} }`)
+	const enums_query = enum_names.map(name => {
+		return `${name}: __type(name: "${name}") { enumValues { name } }`
+	}).join(EOL)
+	const enums_res = await cms_query(`{ ${enums_query} }`)
 	const enums = {}
 	for (const [key, { enumValues }] of Object.entries(enums_res)) {
 		enums[key] = enumValues.map(value => value.name)
 	}
 
 	// send the response
-	const final = { entries, counts, enums }
+	const final = { plugin: 'graphcms', schema, counts, entries, enums }
 
 	// // DEV ONLY CACHE...UNCOMMENT...
 	// dev_only_save_to_cache(final)
