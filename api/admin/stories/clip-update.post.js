@@ -18,26 +18,24 @@ module.exports = async function({ clip }) {
 
 	const { styles } = clip
 	const styles_mutation = () => {
-		// FIXME: this is broken...waiting for fix from GraphCMS team
-		return ''
-		// let output = ''
-		// if (styles) {
-		// 	output += ['create', 'update'].map(type => {
-		// 		return [
-		// 			`${type}: {`,
-		// 			typeof styles.top === 'number' ? `top: ${styles.top}` : null,
-		// 			typeof styles.right === 'number' ? `right: ${styles.right}` : null,
-		// 			typeof styles.bottom === 'number' ? `bottom: ${styles.bottom}` : null,
-		// 			typeof styles.left === 'number' ? `left: ${styles.left}` : null,
-		// 			typeof styles.width === 'number' ? `templateWidth: ${styles.width}` : null,
-		// 			typeof styles.height === 'number' ? `templateHeight: ${styles.height}` : null,
-		// 			typeof styles.percent === 'boolean' ? `widthAsPercent: ${styles.percent}` : null,
-		// 			typeof styles.gap === 'number' ? `gap: ${styles.gap}` : null,
-		// 			'}',
-		// 		].filter(Boolean).join(EOL)
-		// 	}).join(EOL) + EOL
-		// }
-		// return output
+		let output = ''
+		if (styles) {
+			output += ['create', 'update'].map(type => {
+				return [
+					`${type}: {`,
+					'top: ' + (typeof styles.top === 'number' ? styles.top : 'null'),
+					'right: ' + (typeof styles.right === 'number' ? styles.right : 'null'),
+					'bottom: ' + (typeof styles.bottom === 'number' ? styles.bottom : 'null'),
+					'left: ' + (typeof styles.left === 'number' ? styles.left : 'null'),
+					'templateWidth: ' + (typeof styles.width === 'number' ? styles.width : 'null'),
+					'templateHeight: ' + (typeof styles.height === 'number' ? styles.height : 'null'),
+					'widthAsPercent: ' + (typeof styles.percent === 'boolean' ? styles.percent : 'null'),
+					'gap: ' + (typeof styles.gap === 'number' ? styles.gap : 'null'),
+					'}',
+				].filter(Boolean).join(EOL)
+			}).join(EOL) + EOL
+		}
+		return output
 	}
 
 	function generate_story_asset(asset, bin_index, asset_index) {
@@ -73,15 +71,14 @@ module.exports = async function({ clip }) {
 				hideNavigation: ${clip.hide_navigation}
 				themeElements: [${clip.theme_elements.join(', ')}]
 				transitions: [${clip.transitions.join(', ')}]
-				# FIXME: this is broken...waiting for fix from GraphCMS team
-				# styles: {
-				# 	upsert: {
-				# 		where: { id: "${styles.id}" }
-				# 		data: {
-				# 			${styles_mutation()}
-				# 		}
-				# 	}
-				# }
+				styles: {
+					upsert: {
+						where: { id: "${styles.id}" }
+						data: {
+							${styles_mutation()}
+						}
+					}
+				}
 				assetBins: {
 					upsert: [${clip.asset_bins.map((bin, bin_i) => `{
 						where: { id: "${bin.id}" }
