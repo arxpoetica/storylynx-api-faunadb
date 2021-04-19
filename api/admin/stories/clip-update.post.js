@@ -68,7 +68,8 @@ module.exports = async function({ clip }) {
 				slug: $slug
 				order: ${clip.order}
 				template: ${clip.template}
-				hideNavigation: ${clip.hide_navigation}
+				hideClip: ${clip.hide_clip || false}
+				hideNavigation: ${clip.hide_navigation || false}
 				themeElements: [${clip.theme_elements.join(', ')}]
 				transitions: [${clip.transitions.join(', ')}]
 				styles: {

@@ -7,6 +7,7 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 	const {
 		parent_name,
 		template,
+		hide_clip = false,
 		hide_navigation = false,
 		theme_elements = [],
 		transitions = [],
@@ -34,6 +35,7 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 				parentName: "${parent_name}"
 				order: ${order}
 				template: ${template}
+				hideClip: ${hide_clip}
 				hideNavigation: ${hide_navigation}
 				themeElements: [${theme_elements.join(', ')}]
 				transitions: [${transitions.join(', ')}]
@@ -80,6 +82,7 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 			}) {
 				id
 				slug
+				hide_clip: hideClip
 				hide_navigation: hideNavigation
 				order
 				template

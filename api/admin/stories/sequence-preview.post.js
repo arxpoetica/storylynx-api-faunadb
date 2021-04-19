@@ -80,12 +80,12 @@ module.exports = async function({ story_slug, sequence_slug, clip_id }) {
 					# clips_in_range: clipsInRange(orderBy: order_ASC) { id }
 				}
 			}
-			navigation: sequences(orderBy: order_ASC) {
+			navigation: sequences(where: { hideSequence: false }, orderBy: order_ASC) {
 				title
 				slug
 				hide_navigation: hideNavigation
 				order
-				subnavigation: clips(orderBy: order_ASC) {
+				subnavigation: clips(where: { hideClip: false }, orderBy: order_ASC) {
 					slug
 					hide_navigation: hideNavigation
 					order

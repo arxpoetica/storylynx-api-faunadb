@@ -27,7 +27,7 @@ module.exports = {
 	}, {
 		schema: 'Clip',
 		name: 'clips',
-		fields: 'slug hideNavigation parentName order template themeElements transitions assetBins { id } styles { id } parentAudioClips { id } parentSequence { id }',
+		fields: 'slug hideClip hideNavigation parentName order template themeElements transitions assetBins { id } styles { id } parentAudioClips { id } parentSequence { id }',
 	}, {
 		schema: 'ClipStyle',
 		name: 'clipStyles',
@@ -47,11 +47,11 @@ module.exports = {
 	}, {
 		schema: 'Sequence',
 		name: 'sequences',
-		fields: 'parentStory { id } title slug hideNavigation order clips { id } audioClips { id }',
+		fields: 'parentStory { id } title slug hideSequence hideNavigation order clips { id } audioClips { id }',
 	}, {
 		schema: 'Story',
 		name: 'stories',
-		fields: 'title slug sequences { id }',
+		fields: 'title slug hideStory sequences { id }',
 	}, {
 		schema: 'StoryAsset',
 		name: 'storyAssets',

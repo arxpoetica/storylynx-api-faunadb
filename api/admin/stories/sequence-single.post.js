@@ -8,12 +8,13 @@ module.exports = async function({ id }) {
 		sequence(where: { id: "${id}" }) {
 			id
 			slug
+			hide_sequence: hideSequence
 			hide_navigation: hideNavigation
 			order
 			clips(orderBy: order_ASC) {
-				# TODO: dry this up...it's used in a few places, such as clip-duplicate.post.js
 				id
 				slug
+				hide_clip: hideClip
 				hide_navigation: hideNavigation
 				order
 				template
