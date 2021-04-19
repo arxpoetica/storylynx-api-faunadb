@@ -33,6 +33,7 @@ module.exports = async function({ story_slug, sequence_slug, clip_id }) {
 					url
 					mime_type: mimeType
 				}
+				link
 				source
 				caption
 				width: widthOverride

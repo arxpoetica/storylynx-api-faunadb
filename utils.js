@@ -8,6 +8,8 @@ module.exports = {
 			delete asset.asset.id
 			asset = Object.assign({}, asset, asset.asset)
 			delete asset.asset
+		} else if (asset.link) {
+			asset.mime_type = 'text/x-uri'
 		} else {
 			asset.mime_type = 'text/html'
 			asset.code = asset.code ? JSON.parse(asset.code) : {}

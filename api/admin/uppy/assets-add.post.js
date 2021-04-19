@@ -28,6 +28,7 @@ module.exports = async function({ bin_id, assets }) {
 					filename: fileName
 					mime_type: mimeType
 				}
+				link
 				order
 				name
 				source

@@ -1,18 +1,19 @@
 const { merge_asset } = require('../../../utils.js')
 const { cms_mutate } = require('../../../loaders.js')
 
-module.exports = async function({ bin_id, order, name }) {
+module.exports = async function({ bin_id, order, name, link, caption, source }) {
 
-	const mutation = `mutation create_html($name: String) {
+	const mutation = `mutation create_link($link: String, $name: String, $caption: String, $source: String) {
 		updateAssetsBin(
 			where: { id: "${bin_id}" }
 			data: {
 				storyAssets: {
 					create: [{
 						order: ${order}
+						link: $link
 						name: $name
-						htmlCode: "{}"
-						html: $name
+						caption: $caption
+						source: $source
 					}]
 				}
 			}
@@ -46,7 +47,7 @@ module.exports = async function({ bin_id, order, name }) {
 		}
 	}`
 
-	const variables = { name }
+	const variables = { link, name, caption: caption || '', source: source || '' }
 	const res = await cms_mutate(mutation, variables)
 
 	res.assets = res.updateAssetsBin.assets.map(merge_asset)

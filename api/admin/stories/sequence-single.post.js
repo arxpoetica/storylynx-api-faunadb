@@ -40,6 +40,7 @@ module.exports = async function({ id }) {
 							filename: fileName
 							mime_type: mimeType
 						}
+						link
 						order
 						name
 						source

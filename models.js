@@ -55,7 +55,7 @@ module.exports = {
 	}, {
 		schema: 'StoryAsset',
 		name: 'storyAssets',
-		fields: 'asset { id } name order caption source volume playOnce widthOverride heightOverride contain backgroundPosition htmlTemplate htmlHighlightColor htmlCode html parentAssetBin { id }',
+		fields: 'asset { id } link name order caption source volume playOnce widthOverride heightOverride contain backgroundPosition htmlTemplate htmlHighlightColor htmlCode html parentAssetBin { id }',
 	}, {
 		schema: 'Tag',
 		name: 'tags',
