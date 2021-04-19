@@ -50,7 +50,6 @@ module.exports = async function({ story_slug, sequence_slug }) {
 							color: htmlHighlightColor
 							html
 						}
-						# links // NOTE: will use in the near future for vimeo, etc.
 						transition
 					}
 					audio_clips: parentAudioClips(where: { parentSequence: { id_not: null } }) {

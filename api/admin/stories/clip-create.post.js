@@ -43,7 +43,6 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 					create: [${asset_bins.map((bin, bin_i) => `{
 						order: ${bin.order || 0}
 						${bin.transition ? `transition: ${bin.transition}` : ''}
-						# links: { set: {} }
 						storyAssets: {
 							create: [${bin.assets.map((asset, asset_j) => `{
 								order: ${asset.order || 0}
@@ -123,7 +122,6 @@ module.exports = async function({ clip, slug, order, parent_id }) {
 						code: htmlCode
 						html
 					}
-					# links // NOTE: will use in the near future for vimeo, etc.
 					transition
 				}
 			}

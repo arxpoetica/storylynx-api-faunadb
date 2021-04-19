@@ -19,7 +19,7 @@ module.exports = {
 	}, {
 		schema: 'AssetsBin',
 		name: 'assetsBins',
-		fields: 'parentClip { id } order storyAssets { id } links transition assets { id }',
+		fields: 'parentClip { id } order storyAssets { id } transition assets { id }',
 	}, {
 		schema: 'AudioClip',
 		name: 'audioClips',

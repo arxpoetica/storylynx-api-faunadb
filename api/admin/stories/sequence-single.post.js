@@ -55,7 +55,6 @@ module.exports = async function({ id }) {
 						code: htmlCode
 						html
 					}
-					# links // NOTE: will use in the near future for vimeo, etc.
 					transition
 				}
 				# audio_clips: parentAudioClips(where: { parentSequence: { id_not: null } }) {

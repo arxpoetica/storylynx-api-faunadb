@@ -87,7 +87,6 @@ module.exports = async function({ clip }) {
 							create: {
 								order: ${bin.order || 0}
 								${bin.transition ? `transition: ${bin.transition}` : ''}
-								# links: { set: {} }
 								storyAssets: {
 									create: [${bin.assets.map((asset, asset_j) => generate_story_asset(asset, bin_i, asset_j)).join(EOL)}]
 								}
@@ -95,7 +94,6 @@ module.exports = async function({ clip }) {
 							update: {
 								order: ${bin.order || 0}
 								${bin.transition ? `transition: ${bin.transition}` : ''}
-								# links: { set: {} }
 								storyAssets: {
 									upsert: [${bin.assets.map((asset, asset_j) => `{
 										where: { id: "${asset.id}" }
