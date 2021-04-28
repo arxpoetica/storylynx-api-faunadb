@@ -1,11 +1,11 @@
 const { pascal_to_words, merge_asset } = require('../../../utils.js')
 const { cms_query } = require('../../../loaders.js')
 
-module.exports = async function({ id }) {
+module.exports = async function({ seq_id, story_id }) {
 
 	const query = `query {
 
-		sequence(where: { id: "${id}" }) {
+		sequence(where: { id: "${seq_id}" }) {
 			id
 			slug
 			hide_sequence: hideSequence
@@ -90,6 +90,11 @@ module.exports = async function({ id }) {
 		enum_html_templates: __type(name: "HtmlTemplates") { values: enumValues { name } }
 		enum_html_colors: __type(name: "HtmlHighlightColors") { values: enumValues { name } }
 
+		sequences_list: sequences(orderBy: order_ASC, where: { parentStory: { id: "${story_id}" } }) {
+			id
+			title
+		}
+
 	}`
 
 	const res = await cms_query(query)
@@ -115,6 +120,7 @@ module.exports = async function({ id }) {
 
 	return {
 		sequence: res.sequence,
+		sequences_list: res.sequences_list,
 		sequence_enums: {
 			// FIXME: I'd really like to have a way to cache all of this...
 			// TODO: how deep will this go? fine for now
