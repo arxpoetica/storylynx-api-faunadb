@@ -97,7 +97,7 @@ module.exports = async function() {
 // function dev_only_get_from_cache() {
 // 	const { existsSync, readFileSync } = require('fs')
 // 	const { join } = require('path')
-// 	const filename = join(process.cwd(), 'node_modules/storylynx-api-faunadb/.backup-cache.json')
+// 	const filename = join(process.cwd(), 'node_modules/storylynx-api-graphcms/.backup-cache.json')
 // 	if (existsSync(filename)) {
 // 		console.log('...loading from cache...')
 // 		const cache = JSON.parse(readFileSync(filename, 'utf8'))
@@ -112,6 +112,6 @@ module.exports = async function() {
 // 	// console.log(data)
 // 	const { writeFileSync } = require('fs')
 // 	const { join } = require('path')
-// 	const filename = join(process.cwd(), 'node_modules/storylynx-api-faunadb/.backup-cache.json')
+// 	const filename = join(process.cwd(), 'node_modules/storylynx-api-graphcms/.backup-cache.json')
 // 	writeFileSync(filename, JSON.stringify(data, null, '\t') + EOL, 'utf8')
 // }
