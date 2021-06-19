@@ -1,6 +1,6 @@
-const { cms_query } = require('../../../loaders.js')
+import { cms_query } from '../../../loaders.js'
 
-module.exports = async function({ slug }) {
+export const api = async function({ slug }) {
 	const { post } = await cms_query(`query {
 		post: post(where: { slug: "${slug}" }) {
 			slug

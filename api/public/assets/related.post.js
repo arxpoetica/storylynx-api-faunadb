@@ -1,6 +1,6 @@
-const { cms_query } = require('../../../loaders.js')
+import { cms_query } from '../../../loaders.js'
 
-module.exports = async function() {
+export const api = async function() {
 
 	// FIXME: figure out what constitutes "related"
 	// FIXME: figure out what constitutes "related"

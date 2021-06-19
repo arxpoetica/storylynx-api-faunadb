@@ -1,7 +1,7 @@
-const { cms_mutate } = require('../../../loaders.js')
+import { cms_mutate } from '../../../loaders.js'
 
 
-module.exports = async function({ id, title, connect_ids, disconnect_ids, order }) {
+export const api = async function({ id, title, connect_ids, disconnect_ids, order }) {
 
 	connect_ids = connect_ids.map(id => `{ id: "${id}" }`).join(' ')
 	disconnect_ids = disconnect_ids.map(id => `{ id: "${id}" }`).join(' ')

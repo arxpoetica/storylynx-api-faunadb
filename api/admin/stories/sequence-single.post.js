@@ -1,7 +1,7 @@
-const { pascal_to_words, merge_asset } = require('../../../utils.js')
-const { cms_query } = require('../../../loaders.js')
+import { pascal_to_words, merge_asset } from '../../../utils.js'
+import { cms_query } from '../../../loaders.js'
 
-module.exports = async function({ seq_id, story_id }) {
+export const api = async function({ seq_id, story_id }) {
 
 	const query = `query {
 

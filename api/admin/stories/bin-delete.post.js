@@ -1,7 +1,7 @@
-const { cms_mutate } = require('../../../loaders.js')
+import { cms_mutate } from '../../../loaders.js'
 
 /* eslint-disable max-len */
-module.exports = async function({ bin_id, asset_ids }) {
+export const api = async function({ bin_id, asset_ids }) {
 
 
 	let assets_delete = ''

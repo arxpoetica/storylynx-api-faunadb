@@ -1,6 +1,6 @@
-const { cms_query } = require('../../../loaders.js')
+import { cms_query } from '../../../loaders.js'
 
-module.exports = async function({ sort }) {
+export const api = async function({ sort }) {
 
 	const { items, accountsConnection } = await cms_query(`{
 		items: accounts(orderBy: username_${sort.toUpperCase()}) {

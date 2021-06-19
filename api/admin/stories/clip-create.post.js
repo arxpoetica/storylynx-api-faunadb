@@ -1,8 +1,8 @@
-const { EOL } = require('os')
-const { merge_asset } = require('../../../utils.js')
-const { cms_mutate } = require('../../../loaders.js')
+import { EOL } from 'os'
+import { merge_asset } from '../../../utils.js'
+import { cms_mutate } from '../../../loaders.js'
 
-module.exports = async function({ clip, slug, order, parent_id }) {
+export const api = async function({ clip, slug, order, parent_id }) {
 
 	const {
 		parent_name,

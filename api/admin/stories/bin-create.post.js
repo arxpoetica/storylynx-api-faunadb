@@ -1,6 +1,6 @@
-const { cms_mutate } = require('../../../loaders.js')
+import { cms_mutate } from '../../../loaders.js'
 
-module.exports = async function({ clip_id, order }) {
+export const api = async function({ clip_id, order }) {
 
 	const mutation = `mutation {
 		asset_bin: createAssetsBin(data: {

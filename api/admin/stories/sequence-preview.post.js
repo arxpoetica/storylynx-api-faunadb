@@ -3,10 +3,10 @@
 // other changes:
 //  * removed navigation (not necessary)
 
-const { cms_query } = require('../../../loaders.js')
-const { merge_asset } = require('../../../utils.js')
+import { cms_query } from '../../../loaders.js'
+import { merge_asset } from '../../../utils.js'
 
-module.exports = async function({ story_slug, sequence_slug, clip_id }) {
+export const api = async function({ story_slug, sequence_slug, clip_id }) {
 
 	const clip_query = `{
 		id

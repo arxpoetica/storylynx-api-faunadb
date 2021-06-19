@@ -1,7 +1,7 @@
-const { EOL } = require('os')
-const { cms_query } = require('../../../loaders.js')
+import { EOL } from 'os'
+import { cms_query } from '../../../loaders.js'
 
-module.exports = async function({ filenames }) {
+export const api = async function({ filenames }) {
 
 	const query = `{
   		assets: assetsConnection(where: {

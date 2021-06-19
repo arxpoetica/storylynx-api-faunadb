@@ -1,6 +1,6 @@
-const { cms_mutate } = require('../../../loaders.js')
+import { cms_mutate } from '../../../loaders.js'
 
-module.exports = async function({ asset_ids }) {
+export const api = async function({ asset_ids }) {
 
 	const joined_asset_ids = asset_ids.map(id => `"${id}"`).join(', ')
 

@@ -1,7 +1,7 @@
-const bcrypt = require('bcryptjs')
-const { cms_query } = require('../../loaders.js')
+import bcrypt from 'bcryptjs'
+import { cms_query } from '../../loaders.js'
 
-module.exports = async function({ username, password }) {
+export const api = async function({ username, password }) {
 
 	// NOTE: only a basic checks here...
 	// normally protect against injection attacks, etc...

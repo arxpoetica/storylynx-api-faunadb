@@ -1,7 +1,7 @@
-const { cms_mutate } = require('../../../loaders.js')
+import { cms_mutate } from '../../../loaders.js'
 
 /* eslint-disable max-len */
-module.exports = async function({ clip_id, style_id, asset_bin_ids, asset_ids }) {
+export const api = async function({ clip_id, style_id, asset_bin_ids, asset_ids }) {
 
 	const delete_style = style_id ? `deleted_style: deleteClipStyle(where: { id: "${style_id}" }) { id }` : ''
 

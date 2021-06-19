@@ -1,7 +1,7 @@
-const { cms_query } = require('../../../loaders.js')
-const { create_where } = require('../../../utils.js')
+import { cms_query } from '../../../loaders.js'
+import { create_where } from '../../../utils.js'
 
-module.exports = async function({ page, page_size, tags, status, column, sort }) {
+export const api = async function({ page, page_size, tags, status, column, sort }) {
 	const resources_where = create_where({ status, tags })
 	column = column === 'published' ? 'publishedDatetime' : column
 

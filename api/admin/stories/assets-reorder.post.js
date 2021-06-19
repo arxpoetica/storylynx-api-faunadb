@@ -1,7 +1,7 @@
-const { EOL } = require('os')
-const { cms_mutate } = require('../../../loaders.js')
+import { EOL } from 'os'
+import { cms_mutate } from '../../../loaders.js'
 
-module.exports = async function({ asset_changes }) {
+export const api = async function({ asset_changes }) {
 
 	const mutation = `mutation {
 		${asset_changes.map(({ id, order }) => `

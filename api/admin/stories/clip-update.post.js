@@ -1,7 +1,7 @@
-const { EOL } = require('os')
-const { cms_mutate } = require('../../../loaders.js')
+import { EOL } from 'os'
+import { cms_mutate } from '../../../loaders.js'
 
-module.exports = async function({ clip }) {
+export const api = async function({ clip }) {
 
 	let mutation_var_defs = clip.asset_bins.map((bin, bin_i) => {
 		return bin.assets.map((_, asset_j) => {

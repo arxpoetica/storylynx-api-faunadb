@@ -1,6 +1,6 @@
-const { cms_query } = require('../../../loaders.js')
+import { cms_query } from '../../../loaders.js'
 
-module.exports = async function() {
+export const api = async function() {
 	const query = `{
 
 		ungrouped_assets: assets(

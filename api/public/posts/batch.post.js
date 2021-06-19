@@ -1,6 +1,6 @@
-const { cms_query } = require('../../../loaders.js')
+import { cms_query } from '../../../loaders.js'
 
-module.exports = async function({ batch, batch_size, tags }) {
+export const api = async function({ batch, batch_size, tags }) {
 
 	let where = ''
 	if (tags && tags.length) {

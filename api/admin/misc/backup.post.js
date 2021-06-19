@@ -1,9 +1,9 @@
-const { EOL } = require('os')
-const { cms_query } = require('../../../loaders.js')
-const { models } = require('../../../models.js')
+import { EOL } from 'os'
+import { cms_query } from '../../../loaders.js'
+import { models } from '../../../models.js'
 
 // TODO: think this through much more comprehensively
-module.exports = async function() {
+export const api = async function() {
 
 	// // DEV ONLY CACHE...UNCOMMENT...
 	// const cache = dev_only_get_from_cache()

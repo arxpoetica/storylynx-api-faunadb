@@ -5,6 +5,9 @@
   "repository": "git@github.com:arxpoetica/storylynx-api-graphcms.git",
   "author": "@arxpoetica",
   "license": "MIT",
+  "volta": {
+    "node": "16.3.0"
+  },
   "scripts": {},
   "dependencies": {
     "ansi-colors": "4.1.1",

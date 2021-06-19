@@ -1,6 +1,6 @@
-const { cms_query } = require('../../../loaders.js')
+import { cms_query } from '../../../loaders.js'
 
-module.exports = async function({ story_id }) {
+export const api = async function({ story_id }) {
 
 	const res = await cms_query(`query {
 		sequences(orderBy: order_ASC, where: { parentStory: { id: "${story_id}" } }) {

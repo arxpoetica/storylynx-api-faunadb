@@ -1,6 +1,6 @@
-const { cms_mutate } = require('../../../loaders.js')
+import { cms_mutate } from '../../../loaders.js'
 
-module.exports = async function({ id, order, parent_id }) {
+export const api = async function({ id, order, parent_id }) {
 
 	const mutation = `
 		mutation {

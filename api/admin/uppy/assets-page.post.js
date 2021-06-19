@@ -1,6 +1,6 @@
-const { cms_query } = require('../../../loaders.js')
+import { cms_query } from '../../../loaders.js'
 
-module.exports = async function({ ids, search, page, page_size, column, sort }) {
+export const api = async function({ ids, search, page, page_size, column, sort }) {
 
 	ids = (ids || []).map(id => `"${id}"`).join(',')
 	search = search || ''

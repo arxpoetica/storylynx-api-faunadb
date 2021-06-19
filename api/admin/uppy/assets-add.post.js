@@ -1,8 +1,8 @@
-const { EOL } = require('os')
-const { merge_asset } = require('../../../utils.js')
-const { cms_mutate } = require('../../../loaders.js')
+import { EOL } from 'os'
+import { merge_asset } from '../../../utils.js'
+import { cms_mutate } from '../../../loaders.js'
 
-module.exports = async function({ bin_id, assets }) {
+export const api = async function({ bin_id, assets }) {
 
 	const created_assets = assets.map(asset => `{
 		order: ${asset.order}

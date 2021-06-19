@@ -1,6 +1,6 @@
-const { cms_mutate } = require('../../../loaders.js')
+import { cms_mutate } from '../../../loaders.js'
 
-module.exports = async function({ id, title, caption, content_type, year, subject, source, detail }) {
+export const api = async function({ id, title, caption, content_type, year, subject, source, detail }) {
 
 	content_type = content_type === '' ? null : content_type
 	year = year === '' ? null : year

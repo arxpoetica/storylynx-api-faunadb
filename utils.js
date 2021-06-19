@@ -1,41 +1,37 @@
-module.exports = {
+export const pascal_to_words = str => str.split(/(?=[A-Z0-9])/).join(' ')
 
-	pascal_to_words: str => str.split(/(?=[A-Z0-9])/).join(' '),
+export const merge_asset = asset => {
+	if (asset.asset) {
+		asset.asset_id = asset.asset.id
+		delete asset.asset.id
+		asset = Object.assign({}, asset, asset.asset)
+		delete asset.asset
+	} else if (asset.link) {
+		asset.mime_type = 'text/x-uri'
+	} else {
+		asset.mime_type = 'text/html'
+		asset.code = asset.code ? JSON.parse(asset.code) : {}
+	}
 
-	merge_asset: asset => {
-		if (asset.asset) {
-			asset.asset_id = asset.asset.id
-			delete asset.asset.id
-			asset = Object.assign({}, asset, asset.asset)
-			delete asset.asset
-		} else if (asset.link) {
-			asset.mime_type = 'text/x-uri'
-		} else {
-			asset.mime_type = 'text/html'
-			asset.code = asset.code ? JSON.parse(asset.code) : {}
-		}
+	// clamping volume putting in range between 0 and 1
+	if (asset.volume) {
+		asset.volume = Math.max(Math.min(asset.volume / 10, 1), 0)
+	}
+	return asset
+}
 
-		// clamping volume putting in range between 0 and 1
-		if (asset.volume) {
-			asset.volume = Math.max(Math.min(asset.volume / 10, 1), 0)
-		}
-		return asset
-	},
-
-	create_where: function({ status = [], tags = [] }) {
-		let where = ''
-		if (status.length || tags.length) {
-			where = 'where: { AND: ['
-			if (status.length) {
-				where += '{ OR: ['
-				where += status.map(stat => `{ status: ${stat} }`).join(' ')
-				where += '] }'
-			}
-			where += tags.length ? tags.map(tag => `{ tags_some: { tag: "${tag}" } }`).join(' ') : ''
+export const create_where = function({ status = [], tags = [] }) {
+	let where = ''
+	if (status.length || tags.length) {
+		where = 'where: { AND: ['
+		if (status.length) {
+			where += '{ OR: ['
+			where += status.map(stat => `{ status: ${stat} }`).join(' ')
 			where += '] }'
 		}
-		// console.log(where)
-		return where
-	},
-
+		where += tags.length ? tags.map(tag => `{ tags_some: { tag: "${tag}" } }`).join(' ') : ''
+		where += '] }'
+	}
+	// console.log(where)
+	return where
 }

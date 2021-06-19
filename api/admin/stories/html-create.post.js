@@ -1,7 +1,7 @@
-const { merge_asset } = require('../../../utils.js')
-const { cms_mutate } = require('../../../loaders.js')
+import { merge_asset } from '../../../utils.js'
+import { cms_mutate } from '../../../loaders.js'
 
-module.exports = async function({ bin_id, order, name }) {
+export const api = async function({ bin_id, order, name }) {
 
 	const mutation = `mutation create_html($name: String) {
 		updateAssetsBin(

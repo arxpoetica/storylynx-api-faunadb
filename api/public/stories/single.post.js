@@ -1,7 +1,7 @@
-const { cms_query } = require('../../../loaders.js')
-const { merge_asset } = require('../../../utils.js')
+import { cms_query } from '../../../loaders.js'
+import { merge_asset } from '../../../utils.js'
 
-module.exports = async function({ story_slug, sequence_slug }) {
+export const api = async function({ story_slug, sequence_slug }) {
 
 	const { story } = await cms_query(`query {
 		story(where: { slug: "${story_slug}" }) {
