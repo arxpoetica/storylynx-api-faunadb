@@ -3,12 +3,10 @@ lockfileVersion: 5.3
 specifiers:
   ansi-colors: 4.1.1
   bcryptjs: 2.4.3
-  node-fetch: 2.6.1
 
 dependencies:
   ansi-colors: 4.1.1
   bcryptjs: 2.4.3
-  node-fetch: 2.6.1
 
 packages:
 
@@ -19,9 +17,4 @@ packages:
 
   /bcryptjs/2.4.3:
     resolution: {integrity: sha1-mrVie5PmBiH/fNrF2pczAn3x0Ms=}
-    dev: false
-
-  /node-fetch/2.6.1:
-    resolution: {integrity: sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==}
-    engines: {node: 4.x || >=6.0.0}
     dev: false

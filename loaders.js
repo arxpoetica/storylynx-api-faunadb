@@ -1,12 +1,12 @@
-import fetch from 'node-fetch'
+/* global fetch */
 
 export const cms_query = async function(query, variables) {
 	try {
-		const res = await fetch(process.env.LYNX_GRAPHCMS_ENDPOINT, {
+		const res = await fetch(process.env['LYNX_GRAPHCMS_ENDPOINT'], {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + process.env.LYNX_GRAPHCMS_TOKEN,
+				Authorization: 'Bearer ' + process.env['LYNX_GRAPHCMS_TOKEN'],
 			},
 			body: JSON.stringify({ query, variables }),
 		})
@@ -21,11 +21,11 @@ export const cms_query = async function(query, variables) {
 
 export const cms_mutate = async function(query, variables) {
 	try {
-		const res = await fetch(process.env.LYNX_GRAPHCMS_ENDPOINT, {
+		const res = await fetch(process.env['LYNX_GRAPHCMS_ENDPOINT'], {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + process.env.LYNX_GRAPHCMS_MUTATE_TOKEN,
+				Authorization: 'Bearer ' + process.env['LYNX_GRAPHCMS_MUTATE_TOKEN'],
 			},
 			body: JSON.stringify({ query, variables }),
 		})
